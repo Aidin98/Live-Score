@@ -8,10 +8,11 @@ class User extends BaseModel {
 
     return null;
   }
+  getAll() {
+    return this.Model.find({});
+  }
 
   async signUp(signUpData) {
-   
-
     try {
       return await this.Model.create(signUpData);
     } catch (e) {
@@ -39,6 +40,15 @@ class User extends BaseModel {
     } catch (e) {
       return false;
     }
+  }
+  findAndUpdate(id, data) {
+    return this.Model.findOneAndUpdate({ _id: id }, data, {
+      new: true,
+      runValidators: true,
+    });
+  }
+  findAndDelete(id) {
+    return this.Model.findOneAndRemove({ _id: id });
   }
 }
 

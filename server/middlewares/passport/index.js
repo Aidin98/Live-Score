@@ -1,6 +1,7 @@
 const GraphqlStrategy = require("./strategies");
 const User = require("../../database/models/user");
 
+
 exports.init = (passport) => {
   passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -22,7 +23,7 @@ exports.init = (passport) => {
         if (!user) {
           return done(null, false);
         }
-
+          console.log(user)
         return done(null, user);
       });
     })

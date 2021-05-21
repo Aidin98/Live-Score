@@ -4,9 +4,9 @@ const BaseLayout = ({ children, page = "" }) => {
   const isHomePage = () => page === "Home";
 
   return (
-    <div className="portfolio-app">
-      <Navbar />
-      
+    <div className="livescore-app">
+       <Navbar />
+
       <div className="container">{children}</div>
       {/* FOOTER STARTS */}
       <Footer />

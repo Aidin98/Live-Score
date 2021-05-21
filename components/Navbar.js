@@ -45,7 +45,7 @@ const DropdownContent = styled.div`
   top: 80px;
   right:0;
   width: 300px;
-  z-index: 999;
+  z-index: 999 !important;
   border: 1px solid rgba(0, 0, 0, 0.04);
   box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
 `;
@@ -108,6 +108,7 @@ console.log('user je ',user)
                   <AppLink href="/logout">Log Out</AppLink>
                 </LI>
               )}
+              {user && <LI><AppLink href='/allUsers'>All Users</AppLink></LI>}
             </UL>
           </DropdownContent>
         )}
