@@ -1,15 +1,17 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+
 const Schema = mongoose.Schema;
 
 
 const eventSchema=new Schema({
-  type:{
+  eventType:{
     enum:['haftime_start','halftime_end','goal','yellow_card','red_card','substitution','foul','game_end'],
     type:String
   },
   team:{
     enum:['home','away','global'],
+    type:String
+  },
     time:{
       type:Date,
       default:new Date()
@@ -26,4 +28,6 @@ const eventSchema=new Schema({
       ref:"Game"
     }
   }
-})
+)
+
+module.exports = mongoose.model("Event", eventSchema);

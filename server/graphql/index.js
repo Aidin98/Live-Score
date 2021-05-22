@@ -7,6 +7,7 @@ const { buildAuthContext } = require("./context");
 
 const User = require("./models/User");
 const Game=require('./models/Game')
+const Event=require('./models/Event')
 exports.createApolloServer = () => {
 
   const typeDefs = gql(`
@@ -17,6 +18,8 @@ exports.createApolloServer = () => {
     user: User
     users:[User]
     games:[Game]
+    gameById(id:ID):Game
+    eventsByGameId(id:ID):[Event]
   }
 
   type Mutation {
@@ -26,7 +29,8 @@ exports.createApolloServer = () => {
     updateUser(id:ID,input:UpdateUserInput):User
     deleteUser(id:ID):ID
     createGame(input:GameInput):Game
-
+    createGameEvent(id:ID,input:EventInput):Event
+    updateEvent(id:ID,input:EventUpdateInput):Event
   }`);
 
 
@@ -48,10 +52,12 @@ exports.createApolloServer = () => {
       ...buildAuthContext(req),
       models: {
         User: new User(mongoose.model("User")),
-        Game:new Game(mongoose.model('Game'),req.user)
+        Game:new Game(mongoose.model('Game'),req.user),
+        Event:new Event(mongoose.model('Event'),req.user)
       },
     }),
   });
 
   return apolloServer;
 };
+

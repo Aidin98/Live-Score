@@ -5,7 +5,7 @@ const { DB_URI } = require("../config/dev");
 
 require("./models/games");
 require("./models/user");
-
+require('./models/event')
 exports.connect = () => {
   mongoose.connect(
     DB_URI,

@@ -44,3 +44,13 @@ border-radius:35px;
   background:grey;
 }
 `
+export const Select = styled.select`
+  padding: 0.5em;
+  color: black;
+  background: lightgray;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+  margin-bottom: 0.5em;
+  outline: none;
+`;

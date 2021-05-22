@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useLazyQuery } from "@apollo/react-hooks";
-import { ADD_GAME,DELETE_USER, GET_ALL_USERS, GET_GAMES, GET_USER, SIGN_IN, SIGN_OUT, SIGN_UP, UPDATE_USER } from "../queries";
+import { ADD_GAME,ADD_GAME_EVENT,DELETE_USER, EVENTS_BY_GAMEID, GET_ALL_USERS, GET_GAMES, GET_GAME_BY_ID, GET_USER, SIGN_IN, SIGN_OUT, SIGN_UP, UPDATE_EVENT, UPDATE_USER } from "../queries";
 //User Starts
 
 export const useSignIn = () =>
@@ -61,8 +61,10 @@ export const useCreateGame = () =>
   });
 
 export const useGetGames=()=>useQuery(GET_GAMES)
-
-
+export const useGetGameById=(options)=>useQuery(GET_GAME_BY_ID,options)
+export const useCreateGameEvent=(options)=>useMutation(ADD_GAME_EVENT,options)
+export const useGetEventsByGameId=(options)=>useQuery(EVENTS_BY_GAMEID,options)
+export const useUpdateEvent=()=>useMutation(UPDATE_EVENT)
 //game ends
 
 

@@ -29,17 +29,34 @@ exports.userMutations = {
 };
 
 //game queries and mutatuins starts
-exports.gameQueries={
-  games:(root,args,ctx)=>{
-    return ctx.models.Game.getAll()
-  }
-}
+exports.gameQueries = {
+  games: (root, args, ctx) => {
+    return ctx.models.Game.getAll();
+  },
+  gameById: async (root, { id }, ctx) => {
+    const game = await ctx.models.Game.getById(id);
+    return game;
+  },
+  eventsByGameId: async (root, { id }, ctx) => {
+    return ctx.models.Event.getAllByGameId(id);
+  },
+};
 exports.gameMutatuions={
   createGame:async (root,{input},ctx)=>{
     const createdGame=await ctx.models.Game.create(input)
     return createdGame
+  },
+  createGameEvent:async(root,{id,input},ctx)=>{
+     input.game_id=id;
+    const event=await ctx.models.Event.create(input)
+    return event;
+  },
+  updateEvent:async(root,{id,input},ctx)=>{
+    const updatedEvent = await ctx.models.Event.findAndUpdate(id,input);
+    return updatedEvent;
   }
 }
 
 
 //game queries and mutatuins ends
+

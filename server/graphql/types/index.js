@@ -22,7 +22,7 @@ exports.userTypes = `
   }
 `;
 
-exports.gameTypes=`
+exports.gameTypes = `
 
 type Game{
   _id:ID
@@ -31,7 +31,7 @@ type Game{
   time_start:String!
   location:String
   referee:String
-  
+  added_by:ID
 }
   input GameInput{
     home_team:String!
@@ -40,5 +40,25 @@ type Game{
     location:String
     referee:String
   }
-
-`
+type Event{
+  _id:ID
+  eventType:String!
+  team:String!
+  time:String
+  text:String
+  added_by:ID
+  game_id:ID
+}
+input EventInput{
+  eventType:String!
+  team:String!
+  time:String
+  text:String
+}
+input EventUpdateInput{
+  eventType:String
+  team:String
+  time:String
+  text:String
+}
+`;

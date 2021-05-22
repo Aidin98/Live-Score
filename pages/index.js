@@ -7,15 +7,19 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Navbar from '../components/Navbar'
 import BaseLayout from '../layout/BaseLayout';
-import styles from '../styles/Home.module.css'
+import Link from 'next/link'
 import { Container, ContainerGames, TitlePage,AddGameButton } from '../styles/IndexPageStyles';
 import { useStyles } from '../styles/ModalSyles';
 import { Title } from '../components/UserCardStyle';
-import  styled  from 'styled-components';
+
 import { useGetGames, useCreateGame, useLazyGetUser } from '../apollo/actions';
 import withApollo from '../hoc/withApollo';
 
-
+const AppLink = ({ children, href, as }) => (
+  <Link href={href} as={as}>
+    <a>{children}</a>
+  </Link>
+);
 
  function Home() {
    const [createGame,{error}]=useCreateGame()
@@ -61,10 +65,12 @@ import withApollo from '../hoc/withApollo';
         <TitlePage>Welcome to Live Score Dasboard</TitlePage>
        {games.map((game)=>{
          return (
-           <ContainerGames key={game._id}>
-             {game.away_team}
-           </ContainerGames>
-         )
+           <AppLink href='/[id]' as={`/${game._id}`}>
+             <ContainerGames key={game._id}>
+               {game.home_team}---{game.away_team}
+             </ContainerGames>
+           </AppLink>
+         );
        })}
       </Container>
       <Modal

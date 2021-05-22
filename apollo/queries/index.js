@@ -122,6 +122,77 @@ export const GET_GAMES = gql`
     }
   }
 `;
+export const GET_GAME_BY_ID=gql`
+query GetGameById($id:ID){
+  gameById(id:$id){
+    _id
+    home_team
+    away_team
+    location
+    referee
+    time_start
+    added_by
+  }
+}
+`
+export const ADD_GAME_EVENT = gql`
+  mutation AddGameEvent(
+    $id: ID!
+    $eventType: String!
+    $team: String!
+    $time: String
+    $text: String
+  ) {
+    createGameEvent(
+      id: $id
+      input: { eventType: $eventType, team: $team, time: $time, text: $text }
+    ) {
+      _id
+      eventType
+      team
+      time
+      text
+      added_by
+      game_id
+    }
+  }
+`;
+export const EVENTS_BY_GAMEID = gql`
+  query EventsByGameId($id: ID) {
+    eventsByGameId(id:$id){
+        _id
+    eventType
+    team
+    time
+    text
+    added_by
+    game_id
+  }
+    }
+
+`;
+export const UPDATE_EVENT = gql`
+  mutation UpdateEvent(
+    $id: ID
+    $eventType: String
+    $team: String
+    $time: String
+    $text: String
+  ) {
+    updateEvent(
+      id: $id
+      input: { eventType: $eventType, team: $team, time: $time, text: $text }
+    ) {
+      _id
+      eventType
+      team
+      time
+      text
+      added_by
+      game_id
+    }
+  }
+`;
 //gameends
 
 
