@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { useGetEventsByGameId, useGetGameById } from '../../apollo/actions'
+import { useDeleteEvent,useGetEventsByGameId, useGetGameById, useUpdateEvent } from '../../apollo/actions'
 import withApollo from '../../hoc/withApollo'
 import BaseLayout from '../../layout/BaseLayout'
 import { EventContainer, SingleGameContainer, Teamcontainer } from '../../styles/GamePageStyle'
@@ -21,13 +21,15 @@ const AppLink = ({ children, href, as }) => (
 const GamePage = () => {
   const classes = useStyles();
   const router=useRouter()
-  console.log('id je ',router.query)
+  const [deleteEvent]=useDeleteEvent()
   const { data: eventData } = useGetEventsByGameId({ variables: {id:router.query.id} });
   const {data:gameData}=useGetGameById({variables:{id:router.query.id}})
+  const [updateEvent,{error}]=useUpdateEvent()
   const [open, setOpen] = useState(false);
-  const [idToUpdate,setIdToUpdate]=useState('')
+  const [idToUpdate,setIdToUpdate]=useState()
+  const events = (eventData && eventData.eventsByGameId) || [];
   const handleOpen = (id) => {
-    console.log("uslo je");
+
     setOpen(true);
     setIdToUpdate(id)
   };
@@ -36,7 +38,19 @@ const GamePage = () => {
     setOpen(false);
     setIdToUpdate('')
   };
-  console.log('eventi za ovu utkmicu su',eventData)
+
+const handleUpdateEvent=(updateData)=>{
+ 
+ if(idToUpdate){
+
+   const id=idToUpdate
+updateEvent({ variables: { id, ...updateData } });
+  handleClose()
+ }
+}
+const handleDeleteEvent=(id)=>{
+  deleteEvent({variables:{id:id}})
+}
   return (
     <BaseLayout>
       <SingleGameContainer>
@@ -53,7 +67,7 @@ const GamePage = () => {
           <Teamcontainer>
             Home Team
             {eventData &&
-              eventData.eventsByGameId.map((event) => {
+             events.map((event) => {
                 if (event.team === "home") {
                   return (
                     <div
@@ -61,11 +75,17 @@ const GamePage = () => {
                         display: "flex",
                         justifyContent: "space-between",
                       }}
+                      key={event._id}
                     >
                       <p>
                         {event.eventType}-------{event.team}
                       </p>
-                      <button onClick={()=>handleOpen(event._id)}>Edit</button>
+                      <div>
+                        <button onClick={() => handleOpen(event._id)}>
+                          Edit
+                        </button>
+                        <button onClick={()=>handleDeleteEvent(event._id)}>Delete</button>
+                      </div>
                     </div>
                   );
                 }
@@ -75,7 +95,7 @@ const GamePage = () => {
             {" "}
             Away Team
             {eventData &&
-              eventData.eventsByGameId.map((event) => {
+             events.map((event) => {
                 if (event.team === "away") {
                   return (
                     <div
@@ -83,13 +103,19 @@ const GamePage = () => {
                         display: "flex",
                         justifyContent: "space-between",
                       }}
+                      key={event._id}
                     >
                       <p>
                         {event.eventType}-------{event.team}
                       </p>
-                      <button onClick={() => handleOpen(event._id)}>
-                        Edit
-                      </button>
+                      <div>
+                        <button onClick={() => handleOpen(event._id)}>
+                          Edit
+                        </button>
+                        <button onClick={() => handleDeleteEvent(event._id)}>
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   );
                 }
@@ -111,7 +137,7 @@ const GamePage = () => {
           <Fade in={open}>
             <div className={classes.paper}>
               <Title>Edit User</Title>
-              <EditEventForm onSubmit={(editData)=>alert(JSON.stringify(editData))} />
+              <EditEventForm onSubmit={handleUpdateEvent} />
 
             </div>
           </Fade>

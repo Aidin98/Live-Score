@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const eventSchema=new Schema({
   eventType:{
-    enum:['haftime_start','halftime_end','goal','yellow_card','red_card','substitution','foul','game_end'],
+    enum:['halftime_start','halftime_end','goal','yellow_card','red_card','substitution','foul','game_end'],
     type:String
   },
   team:{

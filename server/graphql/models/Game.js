@@ -17,7 +17,7 @@ class Game extends BaseModel {
   }
 
   create(data) {
-    console.log('user je ',this.user)
+    
     if (!this.user || this.writeRights !==this.user.role) {
       throw new Error("Not Authorised!!!");
     }

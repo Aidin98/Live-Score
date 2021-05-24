@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useLazyQuery } from "@apollo/react-hooks";
-import { ADD_GAME,ADD_GAME_EVENT,DELETE_USER, EVENTS_BY_GAMEID, GET_ALL_USERS, GET_GAMES, GET_GAME_BY_ID, GET_USER, SIGN_IN, SIGN_OUT, SIGN_UP, UPDATE_EVENT, UPDATE_USER } from "../queries";
+import { ADD_GAME,ADD_GAME_EVENT,DELETE_EVENT,DELETE_USER, EVENTS_BY_GAMEID, GET_ALL_USERS, GET_GAMES, GET_GAME_BY_ID, GET_USER, SIGN_IN, SIGN_OUT, SIGN_UP, UPDATE_EVENT, UPDATE_USER } from "../queries";
 //User Starts
 
 export const useSignIn = () =>
@@ -47,24 +47,38 @@ export const useDeleteUser = () =>
 //game starts
 export const useCreateGame = () =>
   useMutation(ADD_GAME, {
-    update(cache, { data: { createGame } }) {
-      console.log('podaci za kreaciju su ',createGame)
-      const { games } = cache.readQuery({ query: GET_GAMES });
-      console.log('prijasnji podaci su',games)
-      const newGames=[...games,createGame]
-      cache.writeQuery({
-        query: GET_GAMES,
-        data: {games:newGames},
-      });
-      console.log('updateovani podaci si',games)
-    },
+ update: (cache, { data: { createGame } }) => {
+         const data = cache.readQuery({ query: GET_GAMES });
+         data.games = [...data.games, createGame];
+         cache.writeQuery({ query: GET_GAMES }, data);
+ }
   });
 
 export const useGetGames=()=>useQuery(GET_GAMES)
 export const useGetGameById=(options)=>useQuery(GET_GAME_BY_ID,options)
-export const useCreateGameEvent=(options)=>useMutation(ADD_GAME_EVENT,options)
+export const useCreateGameEvent = () =>
+  useMutation(ADD_GAME_EVENT, {
+    update: (cache, { data: { createGameEvent } }) => {
+      const data = cache.readQuery({ query: EVENTS_BY_GAMEID });
+      data.eventsByGameId = [...data.eventsByGameId, createGameEvent];
+      cache.writeQuery({ query: EVENTS_BY_GAMEID }, data);
+    },
+  });
 export const useGetEventsByGameId=(options)=>useQuery(EVENTS_BY_GAMEID,options)
-export const useUpdateEvent=()=>useMutation(UPDATE_EVENT)
+export const useUpdateEvent=(options)=>useMutation(UPDATE_EVENT,options)
+export const useDeleteEvent = () =>
+  useMutation(DELETE_EVENT, {
+       update: (cache,{data:{deleteEvent}}) => {
+                const data = cache.readQuery({ query: EVENTS_BY_GAMEID });
+                console.log('evenuti su ',...data.eventsByGameId)
+                data.eventsByGameId = data.eventsByGameId.filter(
+                  (p) => p._id !== deleteEvent
+                );
+                cache.writeQuery({ query: EVENTS_BY_GAMEID }, data);
+              }
+            });
+
+
 //game ends
 
 

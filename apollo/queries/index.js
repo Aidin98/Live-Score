@@ -171,13 +171,17 @@ export const EVENTS_BY_GAMEID = gql`
     }
 
 `;
+
+
 export const UPDATE_EVENT = gql`
+
   mutation UpdateEvent(
     $id: ID
     $eventType: String
     $team: String
     $time: String
     $text: String
+
   ) {
     updateEvent(
       id: $id
@@ -193,7 +197,11 @@ export const UPDATE_EVENT = gql`
     }
   }
 `;
+export const DELETE_EVENT = gql`
+  mutation DeleteEvent($id: ID) {
+    deleteEvent(id: $id)
+  }
+`;
 //gameends
-
 
 

@@ -31,6 +31,7 @@ exports.createApolloServer = () => {
     createGame(input:GameInput):Game
     createGameEvent(id:ID,input:EventInput):Event
     updateEvent(id:ID,input:EventUpdateInput):Event
+    deleteEvent(id:ID):ID
   }`);
 
 

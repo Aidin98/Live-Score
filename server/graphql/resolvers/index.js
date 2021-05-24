@@ -54,6 +54,10 @@ exports.gameMutatuions={
   updateEvent:async(root,{id,input},ctx)=>{
     const updatedEvent = await ctx.models.Event.findAndUpdate(id,input);
     return updatedEvent;
+  },
+  deleteEvent:async(root,{id},ctx)=>{
+      const deletedEvent = await ctx.models.Event.findAndDelete(id);
+      return deletedEvent._id;
   }
 }
 

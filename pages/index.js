@@ -15,6 +15,7 @@ import { Title } from '../components/UserCardStyle';
 import { useGetGames, useCreateGame, useLazyGetUser } from '../apollo/actions';
 import withApollo from '../hoc/withApollo';
 
+
 const AppLink = ({ children, href, as }) => (
   <Link href={href} as={as}>
     <a>{children}</a>
@@ -28,6 +29,7 @@ const AppLink = ({ children, href, as }) => (
    const classes = useStyles();
   const [open,setOpen]=useState(false)
   const [user, setUser] = useState();
+
   const [getUser, { data:dataU, error:errorU }] = useLazyGetUser();
    const handleOpen = () => {
      console.log("uslo je");
@@ -38,7 +40,9 @@ const AppLink = ({ children, href, as }) => (
      setOpen(false);
    };
    const handleCreateGame=async(inputData)=>{
-     await createGame({variables:inputData})
+     await createGame({
+       variables: {...inputData}
+     });
      handleClose()
    }
    useEffect(() => {
