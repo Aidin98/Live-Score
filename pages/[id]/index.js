@@ -21,12 +21,13 @@ const AppLink = ({ children, href, as }) => (
 const GamePage = () => {
   const classes = useStyles();
   const router=useRouter()
-  const [deleteEvent]=useDeleteEvent()
+  const [deleteEvent] = useDeleteEvent({ id: router.query.id });
   const { data: eventData } = useGetEventsByGameId({ variables: {id:router.query.id} });
   const {data:gameData}=useGetGameById({variables:{id:router.query.id}})
   const [updateEvent,{error}]=useUpdateEvent()
   const [open, setOpen] = useState(false);
   const [idToUpdate,setIdToUpdate]=useState()
+
   const events = (eventData && eventData.eventsByGameId) || [];
   const handleOpen = (id) => {
 
@@ -40,7 +41,7 @@ const GamePage = () => {
   };
 
 const handleUpdateEvent=(updateData)=>{
- 
+
  if(idToUpdate){
 
    const id=idToUpdate
@@ -137,7 +138,7 @@ const handleDeleteEvent=(id)=>{
           <Fade in={open}>
             <div className={classes.paper}>
               <Title>Edit User</Title>
-              <EditEventForm onSubmit={handleUpdateEvent} />
+              <EditEventForm onSubmit={handleUpdateEvent} id={router.query.id} />
 
             </div>
           </Fade>

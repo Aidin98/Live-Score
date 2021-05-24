@@ -56,27 +56,39 @@ export const useCreateGame = () =>
 
 export const useGetGames=()=>useQuery(GET_GAMES)
 export const useGetGameById=(options)=>useQuery(GET_GAME_BY_ID,options)
-export const useCreateGameEvent = () =>
+export const useCreateGameEvent = (options) =>
   useMutation(ADD_GAME_EVENT, {
     update: (cache, { data: { createGameEvent } }) => {
-      const data = cache.readQuery({ query: EVENTS_BY_GAMEID });
-      data.eventsByGameId = [...data.eventsByGameId, createGameEvent];
-      cache.writeQuery({ query: EVENTS_BY_GAMEID }, data);
+      const data = cache.readQuery({ query: EVENTS_BY_GAMEID ,variables: {id:options.id} });
+      console.log('eventi su',data.eventsByGameId)
+   const  {eventsByGameId}=data
+   const newEvents = [...eventsByGameId,createGameEvent]
+
+
+     cache.writeQuery({ query: EVENTS_BY_GAMEID,variables:{id:options.id} , data:{eventsByGameId:newEvents}});
     },
   });
 export const useGetEventsByGameId=(options)=>useQuery(EVENTS_BY_GAMEID,options)
 export const useUpdateEvent=(options)=>useMutation(UPDATE_EVENT,options)
-export const useDeleteEvent = () =>
+export const useDeleteEvent = (options) =>
   useMutation(DELETE_EVENT, {
-       update: (cache,{data:{deleteEvent}}) => {
-                const data = cache.readQuery({ query: EVENTS_BY_GAMEID });
-                console.log('evenuti su ',...data.eventsByGameId)
-                data.eventsByGameId = data.eventsByGameId.filter(
-                  (p) => p._id !== deleteEvent
-                );
-                cache.writeQuery({ query: EVENTS_BY_GAMEID }, data);
-              }
-            });
+    update: (cache, { data: { deleteEvent } }) => {
+      const data = cache.readQuery({
+        query: EVENTS_BY_GAMEID,
+        variables: { id: options.id },
+      });
+      
+      const { eventsByGameId } = data;
+      const newEvents = eventsByGameId.filter((p) => p._id !== deleteEvent);
+
+      cache.writeQuery({
+        query: EVENTS_BY_GAMEID,
+        variables: { id: options.id },
+        data: { eventsByGameId: newEvents },
+      });
+
+    },
+  });
 
 
 //game ends

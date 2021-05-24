@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FormGroup,
   Label,
@@ -10,31 +10,76 @@ import {
 } from "./Forms";
 import { useForm } from "react-hook-form";
 import { Title } from "../UserCardStyle";
-const EditEventForm = ({ onSubmit, user }) => {
+import { useGetEventsByGameId } from "../../apollo/actions";
+const EditEventForm = ({ onSubmit, user,id }) => {
   const { handleSubmit, register } = useForm();
+const [value, setValue] = useState("");
+const { data } = useGetEventsByGameId({ variables: { id: id } });
+const doesInclude = (type) => {
+  if (data && data.eventsByGameId) {
+    const { eventsByGameId } = data;
+    let eventTypes = [];
+    eventsByGameId.forEach((element) => eventTypes.push(element.eventType));
 
+    const statement = eventTypes.includes(type);
+
+    if (statement) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+const check = () => {
+  if (
+    value !== "halftime_start" &&
+    value !== "hamftime_end" &&
+    value !== "game_end"
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
   return (
     <LForm onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
         <Label>Event Type</Label>
-        <Select ref={register} name="eventType">
-          <option value="halftime_start">Halftime-Start</option>
-          <option value="halftime_end">Halftime-End</option>
+        <Select
+          ref={register}
+          name="eventType"
+          onChange={(e) => setValue(e.target.value)}
+        >
+          {!doesInclude("halftime_start") && (
+            <option value="halftime_start">Halftime-Start</option>
+          )}
+          {!doesInclude("halftime_end") && (
+            <option value="halftime_end">Halftime-End</option>
+          )}
           <option value="goal">Goal</option>
           <option value="yellow_card">Yellow Card</option>
           <option value="red_card">Red Card</option>
           <option value="substitution">Substitution</option>
           <option value="foul">Foul</option>
-          <option value="game_end">Game-End</option>
+          {!doesInclude("game_end") && (
+            <option value="game_end">Game-End</option>
+          )}
         </Select>
       </FormGroup>
       <FormGroup>
         <Label>Team</Label>
-        <Select ref={register} name="team">
-          <option value="home">Home</option>
-          <option value="away">Away</option>
-          <option value="global">Global</option>
-        </Select>
+
+        {check() ? (
+          <Select ref={register} name="team">
+            <option value="home">Home</option>
+            <option value="away">Away</option>
+            <option value="global">Global</option>
+          </Select>
+        ) : (
+          <Select ref={register} name="team">
+            <option value="global">Global</option>
+          </Select>
+        )}
       </FormGroup>
       <FormGroup>
         <Label htmlFor="label">Time :</Label>
