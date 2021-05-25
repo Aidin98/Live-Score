@@ -6,12 +6,14 @@ export const FormGroup = styled.div`
   display: block;
   width: 300px;
   margin: 30px auto;
+
+  margin-bottom:30px;
 `;
 
 export const Label = styled.label`
-  margin-bottom: 0.5em;
+  margin-bottom: 5px;;
   color: black;
-  display: block;
+
 `;
 
 export const Input = styled.input`
@@ -23,6 +25,7 @@ export const Input = styled.input`
   width: 100%;
   margin-bottom: 0.5em;
   outline:none;
+  margin-top:10px;
 `;
 
 export const Message = styled.label`
@@ -53,4 +56,14 @@ export const Select = styled.select`
   width: 100%;
   margin-bottom: 0.5em;
   outline: none;
+  margin-top: 10px;
+`;
+export const FormTitle = styled.h1`
+  margin: auto;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+  margin-top: 50px;
+  margin-bottom: 20px;
 `;

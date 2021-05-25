@@ -6,15 +6,15 @@ const Schema = mongoose.Schema;
 const gameSchema = new Schema({
   home_team: {
     type: String,
-    required: true,
+    required: "Home Team is required",
   },
   away_team: {
     type: String,
-    required: true,
+    required: "Away Team  is required",
   },
   time_start: {
     type: Date,
-    required: true,
+    required: "Match Time is required",
   },
   location: {
     type: String,

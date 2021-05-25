@@ -5,35 +5,40 @@ import BaseLayout from '../../layout/BaseLayout'
 import { useCreateGameEvent, useGetEventsByGameId } from '../../apollo/actions';
 import { useRouter } from 'next/router';
 import withApollo from '../../hoc/withApollo';
+import { EventForm } from '../../styles/GamePageStyle';
+import { FormTitle } from '../../components/forms/Forms';
+import { Container, Span } from '../../styles/LoginStyle';
 
 
-const Title = styled.h1`
-  margin: auto;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: black;
-  margin-top: 50px;
-`;
+
 const newEvent = () => {
   const router=useRouter()
   const id=router.query.id
   const [createGameEvent,{error}]=useCreateGameEvent({id:id})
 
- 
-  const handleCreateGameEvent=(data)=>{
-    if(data){
-     createGameEvent({ variables: {id, ...data,},   });
+
+  const handleCreateGameEvent=async(data)=>{
+    try{
+if(data){
+    await createGameEvent({ variables: {id, ...data,},   });
       router.push(`/${id}`)
+    }
+    }catch(e){
+      return
     }
     }
   return (
     <BaseLayout>
-      <Title>Add New Event</Title>
-      <AddEventForm
-        onSubmit={handleCreateGameEvent}
-        id={router.query.id}
-      />
+      <Container style={{ marginTop: "80px" }}>
+        <FormTitle>Add New Event</FormTitle>
+        <AddEventForm onSubmit={handleCreateGameEvent} id={router.query.id} />
+        <pre>
+          {error &&
+            error.graphQLErrors.map(({ message }, i) => (
+              <Span key={i}>{message}</Span>
+            ))}
+        </pre>
+      </Container>
     </BaseLayout>
   );
 }

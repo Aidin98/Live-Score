@@ -1,32 +1,38 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useGetUser, useSignIn } from '../apollo/actions'
+import { FormTitle } from '../components/forms/Forms'
 import LoginForm from '../components/forms/LoginForm'
 import Redirect from '../components/Redirect'
 import withApollo from '../hoc/withApollo'
 import BaseLayout from '../layout/BaseLayout'
-const Title=styled.h1`
-margin:auto;
-text-align:center;
-font-size:2rem;
-font-weight:bold;
-color:black;
-margin-top:50px;
-`
+import { Container, Span, Title } from '../styles/LoginStyle'
+
 
 const login = () => {
    const [signIn, { data, loading, error }] = useSignIn();
    const {data:dataU}=useGetUser()
 
-   console.log('data je ',data)
-   console.log('user je ',dataU)
+
+const handleSignIn = async(signInData) => {
+  try {
+    await signIn({ variables: signInData })
+  } catch (error) {}
+};
   return (
     <BaseLayout>
-      <Title>LOGIN PAGE</Title>
-      <LoginForm onSubmit={(signInData) => signIn({ variables: signInData })} />
-      {data &&  (
-        <Redirect to="/" query={{ message: "LOGGED_IN" }} />
-      )}
+      <Container>
+        <FormTitle>LOGIN PAGE</FormTitle>
+        <LoginForm
+          onSubmit={handleSignIn}
+        />
+        <pre>
+             {error && error.graphQLErrors.map(({ message }, i) => (
+            <Span key={i}>{message}</Span>
+          ))}
+        </pre>
+        {data && <Redirect to="/" query={{ message: "LOGGED_IN" }} />}
+      </Container>
     </BaseLayout>
   );
 }

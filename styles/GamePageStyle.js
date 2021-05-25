@@ -3,17 +3,68 @@ export const SingleGameContainer=styled.div`
 display:flex;
 justify-content:center;
 flex-direction:column;
-align-items:center
+align-items:center;
+margin-top:80px;
+margin-bottom:80px;
 `
 export const EventContainer = styled.div`
   width: 80vw;
-  
   display: grid;
   grid-template-columns: 50% 50%;
+  grid-column-gap: 5px;
   margin-top: 10px;
+  @media (max-width: 768px) {
+    display:flex;
+    flex-direction:column;
+  }
 `;
 export const Teamcontainer=styled.div`
-  background:yellow;
-  height:250px;
 
+
+`
+export const EventRow = styled.div`
+  position: relative;
+  height: 50px;
+  background: whitesmoke;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:0 15px;
+  &:hover {
+    background: lightgray;
+  }
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
+`;
+
+export const GamePageTitle=styled.h1`
+
+`
+
+export const TeamTitle=styled.p`
+padding-left:15px;
+`
+export const GlobalInfo = styled.div`
+  width: 80vw;
+
+  background: whitesmoke;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  flex-direction: column;
+  &:hover {
+    background: lightgray;
+  }
+`;
+export const Info=styled.p`
+padding:3px;
+margin:0;
+`
+
+export const EventForm=styled.div`
+
+align-items:center;
 `

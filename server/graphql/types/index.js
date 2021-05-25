@@ -44,7 +44,7 @@ type Event{
   _id:ID
   eventType:String!
   team:String!
-  time:String
+  time:String!
   text:String
   added_by:ID
   game_id:ID
@@ -52,7 +52,7 @@ type Event{
 input EventInput{
   eventType:String!
   team:String!
-  time:String
+  time:String!
   text:String
 }
 input EventUpdateInput{

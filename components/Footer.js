@@ -1,18 +1,24 @@
 import React from 'react'
-import styled from 'styled-components'
-const FooterBar=styled.footer`
-position:fixed;
-bottom:0;
-height:80px;
-background:lightgrey;
-width:100%;
-`
+import Link from 'next/link'
+import { FooterBar,Image,Copyright ,Links} from '../styles/FooterStyle'
+const AppLink = ({ children, href, as }) => (
+  <Link href={href} as={as}>
+    <a>{children}</a>
+  </Link>
+);
 const Footer = () => {
   return (
     <FooterBar>
-      This is footer!!!
+      <Image
+        src="https://res.cloudinary.com/dmva5v21w/image/upload/v1621495645/live-score-logo_pihmjz.png"
+        alt="logo"
+      />
+      <Copyright>Live Score © 2021</Copyright>
+      <AppLink href='/'>
+      <Links>Home</Links>
+      </AppLink>
     </FooterBar>
-  )
+  );
 }
 
 export default Footer

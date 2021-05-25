@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FormGroup, Label, Input, Message, Button, LForm,Select } from "./Forms";
 import { useForm } from "react-hook-form";
-import { Title } from "../UserCardStyle";
 import { useGetEventsByGameId } from "../../apollo/actions";
 const AddEventForm = ({ onSubmit, user,id }) => {
   const { handleSubmit, register } = useForm();
@@ -12,7 +11,7 @@ const AddEventForm = ({ onSubmit, user,id }) => {
       const{eventsByGameId}=data
       let eventTypes =[]
        eventsByGameId.forEach((element) => eventTypes.push(element.eventType));
-      
+
       const statement=eventTypes.includes(type)
 
       if(statement){
@@ -34,7 +33,7 @@ const AddEventForm = ({ onSubmit, user,id }) => {
   return (
     <LForm onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
-        <Label>Event Type</Label>
+        <Label>Event Type : </Label>
         <Select
           ref={register}
           name="eventType"
@@ -57,7 +56,7 @@ const AddEventForm = ({ onSubmit, user,id }) => {
         </Select>
       </FormGroup>
       <FormGroup>
-        <Label>Team</Label>
+        <Label>Team : </Label>
 
         {check() ? (
           <Select ref={register} name="team">
@@ -77,11 +76,11 @@ const AddEventForm = ({ onSubmit, user,id }) => {
         <Input ref={register} type="text" name="time" id="time" />
       </FormGroup>
       <FormGroup>
-        <Label htmlFor="label">Additional Information</Label>
+        <Label htmlFor="label">Additional Information :</Label>
         <Input ref={register} type="text" name="text" id="text" />
       </FormGroup>
 
-      <Button type="submit">Add Game</Button>
+      <Button type="submit">Add Event</Button>
     </LForm>
   );
 };

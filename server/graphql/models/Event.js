@@ -12,8 +12,8 @@ class Event extends BaseModel {
 
 
   async create(eventData) {
-    if (!this.user) {
-      throw new Error("You need to authenticate to create a event!");
+    if (!this.user || this.user.role!=='admin') {
+      throw new Error("You need to be admin user to create a event!");
     }
 
     eventData.added_by = this.user._id;

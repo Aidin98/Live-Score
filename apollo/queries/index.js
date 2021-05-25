@@ -140,7 +140,7 @@ export const ADD_GAME_EVENT = gql`
     $id: ID!
     $eventType: String!
     $team: String!
-    $time: String
+    $time: String!
     $text: String
   ) {
     createGameEvent(

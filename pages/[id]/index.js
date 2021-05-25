@@ -4,15 +4,28 @@ import React, { useState } from 'react'
 import { useDeleteEvent,useGetEventsByGameId, useGetGameById, useUpdateEvent } from '../../apollo/actions'
 import withApollo from '../../hoc/withApollo'
 import BaseLayout from '../../layout/BaseLayout'
-import { EventContainer, SingleGameContainer, Teamcontainer } from '../../styles/GamePageStyle'
-import { AddGameButton, ContainerGames } from '../../styles/IndexPageStyles'
-
+import {
+  EventContainer,
+  SingleGameContainer,
+  Teamcontainer,
+  EventRow,
+  GamePageTitle,
+  TeamTitle,
+  GlobalInfo,
+  Info,
+} from "../../styles/GamePageStyle";
+import EditIcon from "@material-ui/icons/Edit";
+import { AddGameButton, ContainerGames, GameInfo, GameTeamName, GameTime } from '../../styles/IndexPageStyles'
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { useStyles } from '../../styles/ModalSyles'
 import { Title } from '../../components/UserCardStyle'
 import EditEventForm from '../../components/forms/EditEventForm'
+import { formatDate } from '../../utils/dateFormat'
+import Result from '../../components/Result'
+
 const AppLink = ({ children, href, as }) => (
   <Link href={href} as={as}>
     <a>{children}</a>
@@ -27,7 +40,7 @@ const GamePage = () => {
   const [updateEvent,{error}]=useUpdateEvent()
   const [open, setOpen] = useState(false);
   const [idToUpdate,setIdToUpdate]=useState()
-
+  const game=(gameData && gameData.gameById) || {}
   const events = (eventData && eventData.eventsByGameId) || [];
   const handleOpen = (id) => {
 
@@ -52,54 +65,59 @@ updateEvent({ variables: { id, ...updateData } });
 const handleDeleteEvent=(id)=>{
   deleteEvent({variables:{id:id}})
 }
+{gameData &&
+console.log('podaci su ',game)}
   return (
     <BaseLayout>
       <SingleGameContainer>
-        <h1>this is game page</h1>
+        <GamePageTitle>Game Informations</GamePageTitle>
         <AppLink href="/[id]/newEvent" as={`/${router.query.id}/newEvent`}>
           <AddGameButton style={{ margin: "auto" }}>Add Event</AddGameButton>
         </AppLink>
         {gameData && (
           <ContainerGames>
-            {gameData.gameById.home_team}---{gameData.gameById.away_team}
+            <GameTeamName>{game.home_team}</GameTeamName>
+            <GameInfo>
+              <GameTime> {formatDate(game.time_start)}</GameTime>
+              <Result id={game._id} />
+            </GameInfo>
+            <GameTeamName>{game.away_team}</GameTeamName>
           </ContainerGames>
         )}
+        <GlobalInfo>
+          <Info>Location : {game.location}</Info>
+          <Info>Referee : {game.referee}</Info>
+        </GlobalInfo>
         <EventContainer>
           <Teamcontainer>
-            Home Team
+            <TeamTitle> Home Team</TeamTitle>
             {eventData &&
-             events.map((event) => {
+              events.map((event) => {
                 if (event.team === "home") {
                   return (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                      key={event._id}
-                    >
-                      <p>
+                    <EventRow key={event._id}>
+                      <Info>
                         {event.eventType}-------{event.team}
-                      </p>
+                      </Info>
                       <div>
-                        <button onClick={() => handleOpen(event._id)}>
-                          Edit
-                        </button>
-                        <button onClick={()=>handleDeleteEvent(event._id)}>Delete</button>
+                        <EditIcon onClick={() => handleOpen(event._id)} />
+
+                        <DeleteForeverIcon onClick={() => handleDeleteEvent(event._id)} />
+
                       </div>
-                    </div>
+                    </EventRow>
                   );
                 }
               })}
           </Teamcontainer>
           <Teamcontainer>
             {" "}
-            Away Team
+            <TeamTitle> Away Team</TeamTitle>
             {eventData &&
-             events.map((event) => {
+              events.map((event) => {
                 if (event.team === "away") {
                   return (
-                    <div
+                    <EventRow
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -110,14 +128,13 @@ const handleDeleteEvent=(id)=>{
                         {event.eventType}-------{event.team}
                       </p>
                       <div>
-                        <button onClick={() => handleOpen(event._id)}>
-                          Edit
-                        </button>
-                        <button onClick={() => handleDeleteEvent(event._id)}>
-                          Delete
-                        </button>
+                        <EditIcon onClick={() => handleOpen(event._id)} />
+
+                        <DeleteForeverIcon
+                          onClick={() => handleDeleteEvent(event._id)}
+                        />
                       </div>
-                    </div>
+                    </EventRow>
                   );
                 }
               })}
@@ -138,8 +155,10 @@ const handleDeleteEvent=(id)=>{
           <Fade in={open}>
             <div className={classes.paper}>
               <Title>Edit User</Title>
-              <EditEventForm onSubmit={handleUpdateEvent} id={router.query.id} />
-
+              <EditEventForm
+                onSubmit={handleUpdateEvent}
+                id={router.query.id}
+              />
             </div>
           </Fade>
         </Modal>
