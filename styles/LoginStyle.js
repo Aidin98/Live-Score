@@ -19,5 +19,7 @@ export const Span = styled.div`
   font: size 1.2rem;
   font-weight: bold;
   word-wrap: break-word;
-  width: 200px;
+  width: 270px;
+  overflow-wrap: break-word;
+  white-space: normal;
 `;

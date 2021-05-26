@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nodemon --watch server server/index.js",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production node server/index.js"
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "populateDb": "node server/fakeDb/populate.js"
   },
   "dependencies": {
     "@apollo/client": "^3.3.19",
@@ -29,6 +30,8 @@
     "next-with-apollo": "^5.0.0",
     "passport": "^0.4.1",
     "react": "^17.0.2",
+    "react-datepicker": "^3.8.0",
+    "react-datetime-picker": "^3.2.1",
     "react-dom": "17.0.2",
     "react-hook-form": "^5.3.1",
     "react-moment": "^1.1.1",

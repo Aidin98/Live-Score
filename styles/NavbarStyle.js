@@ -56,5 +56,7 @@ export const Hamburger = styled.button`
 `;
 export const Button = styled.button`
   border-radius: 25px;
-  padding: 5px 18px;
+  padding: 5px 12px;
+ 
+  margin-right:10px;
 `;

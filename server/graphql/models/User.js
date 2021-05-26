@@ -1,6 +1,10 @@
 const BaseModel = require("./BaseModel");
 
 class User extends BaseModel {
+  constructor(model, user) {
+    super(model, user);
+  }
+
   getAuthUser(ctx) {
     if (ctx.isAuthenticated()) {
       return ctx.getUser();
@@ -42,12 +46,19 @@ class User extends BaseModel {
     }
   }
   findAndUpdate(id, data) {
+     if (!this.user || this.user.role !== "admin") {
+       throw new Error("You need to be admin user to edit a user!");
+     }
+
     return this.Model.findOneAndUpdate({ _id: id }, data, {
       new: true,
       runValidators: true,
     });
   }
   findAndDelete(id) {
+     if (!this.user || this.user.role !== "admin") {
+       throw new Error("You need to be admin user to delete a user!");
+     }
     return this.Model.findOneAndRemove({ _id: id });
   }
 }

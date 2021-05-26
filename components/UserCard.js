@@ -8,6 +8,7 @@ import EditUserForm from '../components/forms/EditUserForm'
 import { useDeleteUser, useUpdateUSer } from '../apollo/actions';
 import { toast } from "react-toastify";
 import { useStyles } from '../styles/ModalSyles';
+import { Span } from '../styles/LoginStyle';
 
 
 const UserCard = ({id,email,role}) => {
@@ -23,17 +24,15 @@ const UserCard = ({id,email,role}) => {
    const handleClose = () => {
      setOpen(false);
    };
-   const errorMessage = (error) => {
-     return (
-       (error.graphQLErrors && error.graphQLErrors[0].message) ||
-       "Ooooops something went wrong..."
-     );
-   };
-const handleUserUpdate=(data)=>{
+
+const handleUserUpdate=async(data)=>{
+  try{
   if(data){
-  updateUser({variables:{id,...data}})
+ await updateUser({variables:{id,...data}})
   toast.success("User has been updated", { autoClose: 2000 });
   handleClose()
+  }}catch{
+    return
   }
 }
 const handleDeleteUser=()=>{
@@ -53,7 +52,9 @@ const handleDeleteUser=()=>{
 
       <Button onClick={() => handleOpen()}>Edit User</Button>
 
-      <Button type="button" onClick={handleDeleteUser}>Delete User</Button>
+      <Button type="button" onClick={handleDeleteUser}>
+        Delete User
+      </Button>
 
       <Modal
         aria-labelledby="transition-modal-title"
@@ -70,10 +71,14 @@ const handleDeleteUser=()=>{
         <Fade in={open}>
           <div className={classes.paper}>
             <Title>Edit User</Title>
-            <EditUserForm onSubmit={handleUserUpdate}/>
-            {error && (
-              <h1>{errorMessage(error)}</h1>
-            )}
+            <EditUserForm onSubmit={handleUserUpdate} />
+
+            <pre>
+              {error &&
+                error.graphQLErrors.map(({ message }, i) => (
+                  <Span key={i}>{message}</Span>
+                ))}
+            </pre>
           </div>
         </Fade>
       </Modal>

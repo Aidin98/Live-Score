@@ -23,8 +23,10 @@ import Fade from "@material-ui/core/Fade";
 import { useStyles } from '../../styles/ModalSyles'
 import { Title } from '../../components/UserCardStyle'
 import EditEventForm from '../../components/forms/EditEventForm'
-import { formatDate } from '../../utils/dateFormat'
+import { formatDate, formatEventDate, sortEvents } from '../../utils/dateFormat'
 import Result from '../../components/Result'
+import { Span } from '../../styles/LoginStyle'
+import moment from 'moment'
 
 const AppLink = ({ children, href, as }) => (
   <Link href={href} as={as}>
@@ -33,40 +35,55 @@ const AppLink = ({ children, href, as }) => (
 );
 const GamePage = () => {
   const classes = useStyles();
-  const router=useRouter()
+  const router = useRouter();
   const [deleteEvent] = useDeleteEvent({ id: router.query.id });
-  const { data: eventData } = useGetEventsByGameId({ variables: {id:router.query.id} });
-  const {data:gameData}=useGetGameById({variables:{id:router.query.id}})
-  const [updateEvent,{error}]=useUpdateEvent()
+  const { data: eventData } = useGetEventsByGameId({
+    variables: { id: router.query.id },
+  });
+  const { data: gameData } = useGetGameById({
+    variables: { id: router.query.id },
+  });
+  const [updateEvent, { error }] = useUpdateEvent();
   const [open, setOpen] = useState(false);
-  const [idToUpdate,setIdToUpdate]=useState()
-  const game=(gameData && gameData.gameById) || {}
+  const [idToUpdate, setIdToUpdate] = useState();
+  const game = (gameData && gameData.gameById) || {};
   const events = (eventData && eventData.eventsByGameId) || [];
+  const homeEvents=sortEvents(events.filter((p)=>p.team==='home'))
+  const awayEvents = sortEvents(events.filter((p) => p.team === "away"));
+  console.log(
+    "domaci su",
+    homeEvents
+  );
   const handleOpen = (id) => {
-
     setOpen(true);
-    setIdToUpdate(id)
+    setIdToUpdate(id);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setIdToUpdate('')
+    setIdToUpdate("");
   };
 
-const handleUpdateEvent=(updateData)=>{
+  const handleUpdateEvent = async (updateData) => {
+    try {
+      if (idToUpdate) {
+        const id = idToUpdate;
+        await updateEvent({ variables: { id, ...updateData } });
+        handleClose();
+      }
+    } catch {
+      return;
+    }
+  };
 
- if(idToUpdate){
+  const handleDeleteEvent = async (id) => {
+    try {
+      await deleteEvent({ variables: { id: id } });
+    } catch (e) {
+      return;
+    }
+  };
 
-   const id=idToUpdate
-updateEvent({ variables: { id, ...updateData } });
-  handleClose()
- }
-}
-const handleDeleteEvent=(id)=>{
-  deleteEvent({variables:{id:id}})
-}
-{gameData &&
-console.log('podaci su ',game)}
   return (
     <BaseLayout>
       <SingleGameContainer>
@@ -92,30 +109,47 @@ console.log('podaci su ',game)}
           <Teamcontainer>
             <TeamTitle> Home Team</TeamTitle>
             {eventData &&
-              events.map((event) => {
-                if (event.team === "home") {
+              homeEvents.map((event) => {
+
                   return (
                     <EventRow key={event._id}>
                       <Info>
-                        {event.eventType}-------{event.team}
+                        <span>
+                          {moment
+                            .utc(
+                              moment(
+                                formatDate(event.time),
+                                "DD/MM/YYYY HH:mm:ss"
+                              ).diff(
+                                moment(
+                                  formatDate(game.time_start),
+                                  "DD/MM/YYYY HH:mm:ss"
+                                )
+                              )
+                            )
+                            .format("mm")}
+                          '
+                        </span>{" "}
+                        | {event.eventType}
                       </Info>
                       <div>
                         <EditIcon onClick={() => handleOpen(event._id)} />
 
-                        <DeleteForeverIcon onClick={() => handleDeleteEvent(event._id)} />
-
+                        <DeleteForeverIcon
+                          onClick={() => handleDeleteEvent(event._id)}
+                        />
                       </div>
                     </EventRow>
                   );
-                }
+
               })}
           </Teamcontainer>
           <Teamcontainer>
             {" "}
             <TeamTitle> Away Team</TeamTitle>
             {eventData &&
-              events.map((event) => {
-                if (event.team === "away") {
+              awayEvents.map((event) => {
+
                   return (
                     <EventRow
                       style={{
@@ -125,7 +159,23 @@ console.log('podaci su ',game)}
                       key={event._id}
                     >
                       <p>
-                        {event.eventType}-------{event.team}
+                        <span>
+                          {moment
+                            .utc(
+                              moment(
+                                formatDate(event.time),
+                                "DD/MM/YYYY HH:mm:ss"
+                              ).diff(
+                                moment(
+                                  formatDate(game.time_start),
+                                  "DD/MM/YYYY HH:mm:ss"
+                                )
+                              )
+                            )
+                            .format("mm")}
+                          '
+                        </span>{" "}
+                        | {event.eventType}
                       </p>
                       <div>
                         <EditIcon onClick={() => handleOpen(event._id)} />
@@ -136,7 +186,7 @@ console.log('podaci su ',game)}
                       </div>
                     </EventRow>
                   );
-                }
+
               })}
           </Teamcontainer>
         </EventContainer>
@@ -154,11 +204,17 @@ console.log('podaci su ',game)}
         >
           <Fade in={open}>
             <div className={classes.paper}>
-              <Title>Edit User</Title>
+              <Title>Edit Event</Title>
               <EditEventForm
                 onSubmit={handleUpdateEvent}
                 id={router.query.id}
               />
+              <pre>
+                {error &&
+                  error.graphQLErrors.map(({ message }, i) => (
+                    <Span key={i}>{message}</Span>
+                  ))}
+              </pre>
             </div>
           </Fade>
         </Modal>

@@ -3,7 +3,9 @@ import { useGetEventsByGameId } from "../apollo/actions";
 export const formatDate = (date) => {
   return moment.unix(date / 1000).format("DD/MM/YY, h:mm:ss a");
 };
-export const fromNow = (date) => moment.unix(date / 1000).fromNow();
+export const formatEventDate=(date)=>{
+  return moment.unix(date / 1000).format("h:mm:ss a");
+}
 export const golas=(id)=>{
    const { data: eventData } = useGetEventsByGameId({
      variables: { id:id },
@@ -23,3 +25,11 @@ export const golas=(id)=>{
   }
   return {homeGoals,awayGoals}
 }
+
+
+export const sortGames=(games)=>{
+  return games.sort((a, b) => b.time_start - a.time_start);
+}
+export const sortEvents = (events) => {
+  return events.sort((a, b) => b.time - a.time);
+};

@@ -1,11 +1,8 @@
 
 import Head from 'next/head'
-import AddGameForm from '../components/forms/AddGameForm'
+
 import { useEffect, useState } from 'react';
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import Navbar from '../components/Navbar'
+
 import BaseLayout from '../layout/BaseLayout';
 import Link from 'next/link'
 import { Container, ContainerGames, TitlePage,AddGameButton, GameTeamName, GameInfo, GameTime, GameResult } from '../styles/IndexPageStyles';
@@ -14,11 +11,11 @@ import { Title } from '../components/UserCardStyle';
 import dateFormat from 'dateformat'
 import { useGetGames, useCreateGame, useLazyGetUser } from '../apollo/actions';
 import withApollo from '../hoc/withApollo';
-import Moment from "react-moment";
-import moment from 'moment';
-import { formatDate, golas } from '../utils/dateFormat';
+
+import { formatDate, golas, sortGames } from '../utils/dateFormat';
 import Result from '../components/Result';
-import { Span } from '../styles/LoginStyle';
+
+import { useRouter } from 'next/router';
 
 
 const AppLink = ({ children, href, as }) => (
@@ -28,30 +25,16 @@ const AppLink = ({ children, href, as }) => (
 );
 
  function Home() {
+   const router=useRouter()
    const [createGame,{error}]=useCreateGame()
   const {data:gameData}=useGetGames()
- const  games=(gameData && gameData.games) || []
-   const classes = useStyles();
-  const [open,setOpen]=useState(false)
+ let  games=(gameData && gameData.games) || []
+ games=sortGames(games)
+
   const [user, setUser] = useState();
 
   const [getUser, { data:dataU, error:errorU }] = useLazyGetUser();
-   const handleOpen = () => {
-     setOpen(true);
-   };
 
-   const handleClose = () => {
-     setOpen(false);
-   };
-   const handleCreateGame=async(inputData)=>{
-    try{ await createGame({
-       variables: {...inputData}
-     });
-    }catch(e){
-      return
-    }
-     handleClose()
-   }
    useEffect(() => {
      getUser();
    }, []);
@@ -74,7 +57,7 @@ const AppLink = ({ children, href, as }) => (
       </Head>
 
       <Container>
-        {user && <AddGameButton onClick={handleOpen}>Add Game +</AddGameButton>}
+       
         <TitlePage>Welcome to Live Score Dasboard</TitlePage>
         {games.map((game) => {
           return (
@@ -92,33 +75,6 @@ const AppLink = ({ children, href, as }) => (
             </div>
           );
         })}
-
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          className={classes.modal}
-          open={open}
-          onClose={handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-          
-        >
-          <Fade in={open}>
-            <div className={classes.paper}>
-              <Title>Add Game Form</Title>
-              <AddGameForm onSubmit={handleCreateGame} />
-              <pre>
-                {error &&
-                  error.graphQLErrors.map(({ message }, i) => (
-                    <Span key={i}>{message}</Span>
-                  ))}
-              </pre>
-            </div>
-          </Fade>
-        </Modal>
       </Container>
     </BaseLayout>
   );

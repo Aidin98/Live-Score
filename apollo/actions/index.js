@@ -49,8 +49,10 @@ export const useCreateGame = () =>
   useMutation(ADD_GAME, {
  update: (cache, { data: { createGame } }) => {
          const data = cache.readQuery({ query: GET_GAMES });
+         const {games}=data
+         const newGames=[...games,createGame]
          data.games = [...data.games, createGame];
-         cache.writeQuery({ query: GET_GAMES }, data);
+         cache.writeQuery({ query: GET_GAMES , data:{games:newGames}});
  }
   });
 
@@ -60,7 +62,7 @@ export const useCreateGameEvent = (options) =>
   useMutation(ADD_GAME_EVENT, {
     update: (cache, { data: { createGameEvent } }) => {
       const data = cache.readQuery({ query: EVENTS_BY_GAMEID ,variables: {id:options.id} });
-      console.log('eventi su',data.eventsByGameId)
+
    const  {eventsByGameId}=data
    const newEvents = [...eventsByGameId,createGameEvent]
 
@@ -77,7 +79,7 @@ export const useDeleteEvent = (options) =>
         query: EVENTS_BY_GAMEID,
         variables: { id: options.id },
       });
-      
+
       const { eventsByGameId } = data;
       const newEvents = eventsByGameId.filter((p) => p._id !== deleteEvent);
 

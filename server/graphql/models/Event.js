@@ -20,12 +20,19 @@ class Event extends BaseModel {
     return this.Model.create(eventData)
   }
   findAndUpdate(id, data) {
+    if (!this.user || this.user.role !== "admin") {
+      throw new Error("You need to be admin user to update a event!");
+    }
+
     return this.Model.findOneAndUpdate({ _id: id }, data, {
       new: true,
       runValidators: true,
     });
   }
   findAndDelete(id){
+    if (!this.user || this.user.role !== "admin") {
+      throw new Error("You need to be admin user to delete a event!");
+    }
     return this.Model.findOneAndRemove({_id:id})
   }
 }

@@ -17,9 +17,9 @@ class Game extends BaseModel {
   }
 
   create(data) {
-    
-    if (!this.user || this.writeRights !==this.user.role) {
-      throw new Error("Not Authorised!!!");
+
+    if (!this.user || this.user.role !== "admin") {
+      throw new Error("You need to be admin user to create a game!");
     }
 
     data.added_by = this.user;

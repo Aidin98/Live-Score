@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FormGroup,
   Label,
@@ -11,9 +11,11 @@ import {
 import { useForm } from "react-hook-form";
 import { Title } from "../UserCardStyle";
 import { useGetEventsByGameId } from "../../apollo/actions";
+import { TextField } from "@material-ui/core";
 const EditEventForm = ({ onSubmit, user,id }) => {
-  const { handleSubmit, register } = useForm();
-const [value, setValue] = useState("");
+  const { handleSubmit, register,control,setValue } = useForm();
+const [action, setAction] = useState("");
+const [time, setTime] = useState();
 const { data } = useGetEventsByGameId({ variables: { id: id } });
 const doesInclude = (type) => {
   if (data && data.eventsByGameId) {
@@ -32,15 +34,19 @@ const doesInclude = (type) => {
 };
 const check = () => {
   if (
-    value !== "halftime_start" &&
-    value !== "hamftime_end" &&
-    value !== "game_end"
+    action !== "halftime_start" &&
+    action !== "halftime_end" &&
+    action !== "game_end"
   ) {
     return true;
   } else {
     return false;
   }
 };
+  useEffect(() => {
+    register({ name: "time" });
+    setValue("time", "2017-05-20T10:30");
+  });
   return (
     <LForm onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
@@ -68,12 +74,11 @@ const check = () => {
       </FormGroup>
       <FormGroup>
         <Label>Team</Label>
-
+        {console.log("provjera je ", check())}
         {check() ? (
           <Select ref={register} name="team">
             <option value="home">Home</option>
             <option value="away">Away</option>
-            <option value="global">Global</option>
           </Select>
         ) : (
           <Select ref={register} name="team">
@@ -83,14 +88,25 @@ const check = () => {
       </FormGroup>
       <FormGroup>
         <Label htmlFor="label">Time :</Label>
-        <Input ref={register} type="text" name="time" id="time" />
+        <TextField
+          id="datetime-local"
+          type="datetime-local"
+          defaultValue="2017-05-24T10:30"
+          onChange={(e) => {
+            setValue("time", e.target.value);
+            setTime(e.target.value);
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
       </FormGroup>
       <FormGroup>
         <Label htmlFor="label">Additional Information</Label>
         <Input ref={register} type="text" name="text" id="text" />
       </FormGroup>
 
-      <Button type="submit">Add Game</Button>
+      <Button type="submit">Edit Event</Button>
     </LForm>
   );
 };

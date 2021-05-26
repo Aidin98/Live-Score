@@ -40,7 +40,10 @@ const handleButtonClick=()=>{
       {user && <h5> Welcome {user.email}</h5>}
       <RightNav>
         <AppLink href="/registration">
-      { !user &&   <Button>SIGN UP</Button>}
+          {!user && <Button>SIGN UP</Button>}
+        </AppLink>
+        <AppLink href="/registration">
+          {user && user.role==='admin' && <Button onClick={()=>router.push('/addGame')}>Add Game</Button>}
         </AppLink>
         <Hamburger onClick={handleButtonClick}>☰</Hamburger>
         {isActive && (
@@ -56,7 +59,11 @@ const handleButtonClick=()=>{
                   <AppLink href="/logout">Log Out</AppLink>
                 </LI>
               )}
-              {user && user.role==='admin' && <LI><AppLink href='/allUsers'>All Users</AppLink></LI>}
+              {user && user.role === "admin" && (
+                <LI>
+                  <AppLink href="/allUsers">All Users</AppLink>
+                </LI>
+              )}
             </UL>
           </DropdownContent>
         )}

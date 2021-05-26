@@ -37,10 +37,15 @@ export const Button = styled.button`
   font: 700 1rem "Roboto Slab", sans-serif;
   padding: 0.6rem 1.5em;
   letter-spacing: 0.05rem;
-  margin: 1em;
+  cursor: pointer;
+
   width: 10rem;
   &:focus {
     outline: 2px dotted #55d7dc;
   }
 `;
 
+export const UserContainer=styled.div`
+margin-top:87px;
+margin-bottom:87px;
+`
