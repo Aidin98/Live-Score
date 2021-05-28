@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
-import { useDeleteEvent,useGetEventsByGameId, useGetGameById, useUpdateEvent } from '../../apollo/actions'
+import React, { useEffect, useState } from 'react'
+import { useDeleteEvent,useGetEventsByGameId, useGetGameById, useLazyGetUser, useUpdateEvent } from '../../apollo/actions'
 import withApollo from '../../hoc/withApollo'
 import BaseLayout from '../../layout/BaseLayout'
 import {
@@ -27,6 +27,7 @@ import { formatDate, formatEventDate, sortEvents } from '../../utils/dateFormat'
 import Result from '../../components/Result'
 import { Span } from '../../styles/LoginStyle'
 import moment from 'moment'
+import withAuth from '../../hoc/withAuth'
 
 const AppLink = ({ children, href, as }) => (
   <Link href={href} as={as}>
@@ -34,9 +35,11 @@ const AppLink = ({ children, href, as }) => (
   </Link>
 );
 const GamePage = () => {
+  const [user,setUser]=useState()
   const classes = useStyles();
   const router = useRouter();
   const [deleteEvent] = useDeleteEvent({ id: router.query.id });
+  const [getUser,{data:dataU,error:errorU}]=useLazyGetUser()
   const { data: eventData } = useGetEventsByGameId({
     variables: { id: router.query.id },
   });
@@ -50,10 +53,19 @@ const GamePage = () => {
   const events = (eventData && eventData.eventsByGameId) || [];
   const homeEvents=sortEvents(events.filter((p)=>p.team==='home'))
   const awayEvents = sortEvents(events.filter((p) => p.team === "away"));
-  console.log(
-    "domaci su",
-    homeEvents
-  );
+  const globalEvents=events.filter((p)=>p.team==='global')
+  console.log('global je ',globalEvents)
+useEffect(()=>{
+getUser()
+},[])
+ if (dataU) {
+   if (dataU.user && !user) {
+     setUser(dataU.user);
+   }
+   if (!dataU.user && user) {
+     setUser(null);
+   }
+ }
   const handleOpen = (id) => {
     setOpen(true);
     setIdToUpdate(id);
@@ -83,20 +95,40 @@ const GamePage = () => {
       return;
     }
   };
-
+    const doesInclude=()=>{
+      for (let i = 0; i < events.length; i++) {
+          if(events[i].eventType==='game_end'){
+            return true
+          }
+      }
+      return false
+    }
+    const niceTitle=(type)=>{
+      if(type==='game_end'){
+        return 'Game End :'
+      }
+       if (type === "halftime_start") {
+         return "Halftime Start :";
+       }
+        if (type === "halftime_end") {
+          return "Halftime End :";
+        }
+    }
   return (
     <BaseLayout>
       <SingleGameContainer>
         <GamePageTitle>Game Informations</GamePageTitle>
-        <AppLink href="/[id]/newEvent" as={`/${router.query.id}/newEvent`}>
-          <AddGameButton style={{ margin: "auto" }}>Add Event</AddGameButton>
-        </AppLink>
+        {user && user.role === "admin" && !doesInclude() && (
+          <AppLink href="/[id]/newEvent" as={`/${router.query.id}/newEvent`}>
+            <AddGameButton style={{ margin: "auto" }}>Add Event</AddGameButton>
+          </AppLink>
+        )}
         {gameData && (
           <ContainerGames>
             <GameTeamName>{game.home_team}</GameTeamName>
             <GameInfo>
               <GameTime> {formatDate(game.time_start)}</GameTime>
-              <Result id={game._id} />
+              <Result id={game._id} start_time={game.time_start} />
             </GameInfo>
             <GameTeamName>{game.away_team}</GameTeamName>
           </ContainerGames>
@@ -104,89 +136,94 @@ const GamePage = () => {
         <GlobalInfo>
           <Info>Location : {game.location}</Info>
           <Info>Referee : {game.referee}</Info>
+          {globalEvents.map((global)=>{
+            return (
+              <Info key={global._id}>{niceTitle(global.eventType)} {" "} {formatDate(global.time)}</Info>
+            )
+          })}
         </GlobalInfo>
         <EventContainer>
           <Teamcontainer>
-            <TeamTitle> Home Team</TeamTitle>
+            <TeamTitle>{game.home_team} : Events</TeamTitle>
             {eventData &&
               homeEvents.map((event) => {
-
-                  return (
-                    <EventRow key={event._id}>
-                      <Info>
-                        <span>
-                          {moment
-                            .utc(
+                return (
+                  <EventRow key={event._id}>
+                    <Info>
+                      <span>
+                        {moment
+                          .utc(
+                            moment(
+                              formatDate(event.time),
+                              "DD/MM/YYYY HH:mm:ss"
+                            ).diff(
                               moment(
-                                formatDate(event.time),
+                                formatDate(game.time_start),
                                 "DD/MM/YYYY HH:mm:ss"
-                              ).diff(
-                                moment(
-                                  formatDate(game.time_start),
-                                  "DD/MM/YYYY HH:mm:ss"
-                                )
                               )
                             )
-                            .format("mm")}
-                          '
-                        </span>{" "}
-                        | {event.eventType}
-                      </Info>
-                      <div>
+                          )
+                          .format("mm")}
+                        '
+                      </span>{" "}
+                      | {event.eventType}
+                    </Info>
+                    <div>
+                      {user && user.role === "admin" && (
                         <EditIcon onClick={() => handleOpen(event._id)} />
+                      )}
 
+                      {user && user.role === "admin" && (
                         <DeleteForeverIcon
                           onClick={() => handleDeleteEvent(event._id)}
                         />
-                      </div>
-                    </EventRow>
-                  );
-
+                      )}
+                    </div>
+                  </EventRow>
+                );
               })}
           </Teamcontainer>
           <Teamcontainer>
             {" "}
-            <TeamTitle> Away Team</TeamTitle>
+            <TeamTitle>{game.away_team} : Events</TeamTitle>
             {eventData &&
               awayEvents.map((event) => {
-
-                  return (
-                    <EventRow
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                      key={event._id}
-                    >
-                      <p>
-                        <span>
-                          {moment
-                            .utc(
+                return (
+                  <EventRow
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                    key={event._id}
+                  >
+                    <p>
+                      <span>
+                        {moment
+                          .utc(
+                            moment(
+                              formatDate(event.time),
+                              "DD/MM/YYYY HH:mm:ss"
+                            ).diff(
                               moment(
-                                formatDate(event.time),
+                                formatDate(game.time_start),
                                 "DD/MM/YYYY HH:mm:ss"
-                              ).diff(
-                                moment(
-                                  formatDate(game.time_start),
-                                  "DD/MM/YYYY HH:mm:ss"
-                                )
                               )
                             )
-                            .format("mm")}
-                          '
-                        </span>{" "}
-                        | {event.eventType}
-                      </p>
-                      <div>
-                        <EditIcon onClick={() => handleOpen(event._id)} />
+                          )
+                          .format("mm")}
+                        '
+                      </span>{" "}
+                      | {event.eventType}
+                    </p>
+                    <div>
+                      <EditIcon onClick={() => handleOpen(event._id)} />
 
-                        <DeleteForeverIcon
-                          onClick={() => handleDeleteEvent(event._id)}
-                        />
-                      </div>
-                    </EventRow>
-                  );
-
+                      <DeleteForeverIcon
+                        onClick={() => handleDeleteEvent(event._id)}
+                      />
+                    </div>
+                  </EventRow>
+                );
               })}
           </Teamcontainer>
         </EventContainer>
@@ -223,4 +260,4 @@ const GamePage = () => {
   );
 }
 
-export default withApollo(GamePage)
+export default withApollo(withAuth(GamePage));

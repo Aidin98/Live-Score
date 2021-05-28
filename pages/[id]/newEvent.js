@@ -8,6 +8,7 @@ import withApollo from '../../hoc/withApollo';
 import { EventForm } from '../../styles/GamePageStyle';
 import { FormTitle } from '../../components/forms/Forms';
 import { Container, Span } from '../../styles/LoginStyle';
+import withAuth from '../../hoc/withAuth';
 
 
 
@@ -43,4 +44,4 @@ if(data){
   );
 }
 
-export default withApollo(newEvent)
+export default withApollo(withAuth(newEvent, ["admin"]));

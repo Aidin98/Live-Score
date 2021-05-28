@@ -23,7 +23,7 @@ export const golas=(id)=>{
       awayGoals++;
     }
   }
-  return {homeGoals,awayGoals}
+  return {homeGoals,awayGoals,events}
 }
 
 

@@ -19,6 +19,7 @@ exports.userTypes = `
   }
   input UpdateUserInput{
     email:String!
+    role:String!
   }
 `;
 

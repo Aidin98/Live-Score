@@ -57,7 +57,7 @@ const AppLink = ({ children, href, as }) => (
       </Head>
 
       <Container>
-       
+
         <TitlePage>Welcome to Live Score Dasboard</TitlePage>
         {games.map((game) => {
           return (
@@ -67,7 +67,7 @@ const AppLink = ({ children, href, as }) => (
                   <GameTeamName>{game.home_team}</GameTeamName>
                   <GameInfo>
                     <GameTime> {formatDate(game.time_start)}</GameTime>
-                    <Result id={game._id} />
+                    <Result id={game._id} start_time={game.time_start} />
                   </GameInfo>
                   <GameTeamName>{game.away_team}</GameTeamName>
                 </ContainerGames>

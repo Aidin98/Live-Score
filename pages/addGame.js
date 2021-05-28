@@ -13,6 +13,7 @@ import BaseLayout from "../layout/BaseLayout";
 import withApollo from "../hoc/withApollo";
 import { FormTitle } from "../components/forms/Forms";
 import { Container, Span } from "../styles/LoginStyle";
+import withAuth from "../hoc/withAuth";
 
 
 const addGame = () => {
@@ -46,4 +47,4 @@ const addGame = () => {
   );
 };
 
-export default withApollo(addGame);
+export default withApollo(withAuth(addGame, ["admin"]));

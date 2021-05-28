@@ -56,11 +56,13 @@ export const UPDATE_USER = gql`
   mutation UpdateUser(
     $id: ID
   $email:String!
+  $role:String!
   ) {
     updateUser(
       id: $id
       input: {
        email:$email
+       role:$role
       }
     ) {
         email

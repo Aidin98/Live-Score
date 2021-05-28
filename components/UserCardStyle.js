@@ -3,7 +3,6 @@ import styled from 'styled-components'
 export const Card = styled.div`
   background-color: white;
 
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,7 +25,7 @@ export const Image = styled.img`
   border-radius: 50%;
   border: 5px solid #272133;
   margin-top: 20px;
-  box-shadow: 0 10px 50px rgba(235, 25, 110, 1);
+  box-shadow: 0 10px 50px rgb(38, 38, 38);
 `;
 
 export const Button = styled.button`

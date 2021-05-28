@@ -4,11 +4,12 @@ import { useGetAllUsers } from '../apollo/actions'
 import BaseLayout from '../layout/BaseLayout'
 import UserCard from '../components/UserCard'
 import { UserContainer } from '../components/UserCardStyle'
+import withAuth from '../hoc/withAuth'
 
 const allUsers = () => {
   const {data}=useGetAllUsers()
    const users = (data && data.users) || [];
-  
+
   return (
     <BaseLayout>
       <UserContainer>
@@ -27,5 +28,5 @@ const allUsers = () => {
   );
 }
 
-export default withApollo(allUsers)
+export default withApollo(withAuth(allUsers,['admin']))
 

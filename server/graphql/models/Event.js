@@ -16,6 +16,8 @@ class Event extends BaseModel {
       throw new Error("You need to be admin user to create a event!");
     }
 
+  
+
     eventData.added_by = this.user._id;
     return this.Model.create(eventData)
   }
