@@ -8,45 +8,66 @@ import {
   LForm,
   Select,
 } from "./Forms";
-import { useForm } from "react-hook-form";
-import { Title } from "../UserCardStyle";
+import { useForm, Controller } from "react-hook-form";
 import { useGetEventsByGameId } from "../../apollo/actions";
-import { TextField } from "@material-ui/core";
-const EditEventForm = ({ onSubmit, user,id }) => {
-  const { handleSubmit, register,control,setValue } = useForm();
-const [action, setAction] = useState("");
-const [time, setTime] = useState();
-const { data } = useGetEventsByGameId({ variables: { id: id } });
-const doesInclude = (type) => {
-  if (data && data.eventsByGameId) {
-    const { eventsByGameId } = data;
-    let eventTypes = [];
-    eventsByGameId.forEach((element) => eventTypes.push(element.eventType));
+import "react-clock/dist/Clock.css";
+import "react-time-picker/dist/TimePicker.css";
+import TP, { TimePickerProps } from "react-time-picker/dist/entry.nostyle";
+import {
+  dateDifferenceMinute,
+  formatDate,
+  getCurrentTime,
+  getDateFormat,
+  getDateOnly,
+  getTimeOnly,
+} from "../../utils/dateFormat";
+import moment from "moment";
+const EditEventForm = ({ onSubmit, user, id, gameStart }) => {
+  console.log('utakmica pocinje ',gameStart)
+  const { handleSubmit, register, setValue } = useForm();
+  const [action, setAction] = useState("");
+  const [value, onChange] = useState();
+  const { data } = useGetEventsByGameId({ variables: { id: id } });
+  const doesInclude = (type) => {
+    if (data && data.eventsByGameId) {
+      const { eventsByGameId } = data;
+      let eventTypes = [];
+      eventsByGameId.forEach((element) => eventTypes.push(element.eventType));
 
-    const statement = eventTypes.includes(type);
+      const statement = eventTypes.includes(type);
 
-    if (statement) {
+      if (statement) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+  const check = () => {
+    if (
+      action !== "halftime_start" &&
+      action !== "halftime_end" &&
+      action !== "game_end"
+    ) {
       return true;
     } else {
       return false;
     }
-  }
-};
-const check = () => {
-  if (
-    action !== "halftime_start" &&
-    action !== "halftime_end" &&
-    action !== "game_end"
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-};
+  };
   useEffect(() => {
     register({ name: "time" });
-    setValue("time", "2017-05-20T10:30");
   });
+  let haha = check();
+  const a = new Date(getDateFormat(gameStart));
+
+  const after = a.setHours(a.getHours() + 2);
+
+  const eventContitons = (minute) => {
+    if (dateDifferenceMinute(getCurrentTime(), gameStart) > minute) {
+      return true;
+    }
+    return false;
+  };
   return (
     <LForm onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
@@ -54,7 +75,7 @@ const check = () => {
         <Select
           ref={register}
           name="eventType"
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => setAction(e.target.value)}
         >
           {!doesInclude("halftime_start") && (
             <option value="halftime_start">Halftime-Start</option>
@@ -74,7 +95,6 @@ const check = () => {
       </FormGroup>
       <FormGroup>
         <Label>Team</Label>
-        {console.log("provjera je ", check())}
         {check() ? (
           <Select ref={register} name="team">
             <option value="home">Home</option>
@@ -87,19 +107,24 @@ const check = () => {
         )}
       </FormGroup>
       <FormGroup>
-        <Label htmlFor="label">Time :</Label>
-        <TextField
-          id="datetime-local"
-          type="datetime-local"
-          defaultValue="2017-05-24T10:30"
-          onChange={(e) => {
-            setValue("time", e.target.value);
-            setTime(e.target.value);
-          }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
+        <Label>Time : </Label>
+        {gameStart && (
+          <TP
+            value={value}
+            onChange={(value) => {
+              setValue(
+                "time",
+                moment(
+                  `${getDateOnly(gameStart)} ${value}`,
+                  "DD-MM-YYYY HH:mm ss"
+                ).format()
+              );
+            }}
+            locale="sv-sv"
+            minTime={getTimeOnly(new Date(getDateFormat(gameStart)))}
+            maxTime={getTimeOnly(a)}
+          />
+        )}
       </FormGroup>
       <FormGroup>
         <Label htmlFor="label">Additional Information</Label>

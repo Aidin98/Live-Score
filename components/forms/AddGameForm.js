@@ -8,7 +8,7 @@ const AddGameForm = ({ onSubmit, user }) => {
   const { handleSubmit, register,setValue } = useForm();
   useEffect(() => {
     register({ name: "time_start" });
-    setValue("time_start", "2017-05-20T10:30");
+    
   },[]);
  console.log('izabrano vrijeme je ',time_start)
   return (

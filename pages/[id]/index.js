@@ -23,11 +23,12 @@ import Fade from "@material-ui/core/Fade";
 import { useStyles } from '../../styles/ModalSyles'
 import { Title } from '../../components/UserCardStyle'
 import EditEventForm from '../../components/forms/EditEventForm'
-import { formatDate, formatEventDate, sortEvents } from '../../utils/dateFormat'
+import {  formatDate, formatEventDate, sortEvents } from '../../utils/dateFormat'
 import Result from '../../components/Result'
 import { Span } from '../../styles/LoginStyle'
-import moment from 'moment'
+
 import withAuth from '../../hoc/withAuth'
+import EventTime from '../../components/EventTime'
 
 const AppLink = ({ children, href, as }) => (
   <Link href={href} as={as}>
@@ -54,7 +55,7 @@ const GamePage = () => {
   const homeEvents=sortEvents(events.filter((p)=>p.team==='home'))
   const awayEvents = sortEvents(events.filter((p) => p.team === "away"));
   const globalEvents=events.filter((p)=>p.team==='global')
-  console.log('global je ',globalEvents)
+
 useEffect(()=>{
 getUser()
 },[])
@@ -119,9 +120,14 @@ getUser()
       <SingleGameContainer>
         <GamePageTitle>Game Informations</GamePageTitle>
         {user && user.role === "admin" && !doesInclude() && (
-          <AppLink href="/[id]/newEvent" as={`/${router.query.id}/newEvent`}>
-            <AddGameButton style={{ margin: "auto" }}>Add Event</AddGameButton>
-          </AppLink>
+          <div>
+            <AppLink href="/[id]/newEvent" as={`/${router.query.id}/newEvent`}>
+              <AddGameButton style={{ margin: "auto" }}>
+                Add Event
+              </AddGameButton>
+            </AppLink>
+
+          </div>
         )}
         {gameData && (
           <ContainerGames>
@@ -136,10 +142,12 @@ getUser()
         <GlobalInfo>
           <Info>Location : {game.location}</Info>
           <Info>Referee : {game.referee}</Info>
-          {globalEvents.map((global)=>{
+          {globalEvents.map((global) => {
             return (
-              <Info key={global._id}>{niceTitle(global.eventType)} {" "} {formatDate(global.time)}</Info>
-            )
+              <Info key={global._id}>
+                {niceTitle(global.eventType)} {formatDate(global.time)}
+              </Info>
+            );
           })}
         </GlobalInfo>
         <EventContainer>
@@ -150,23 +158,12 @@ getUser()
                 return (
                   <EventRow key={event._id}>
                     <Info>
-                      <span>
-                        {moment
-                          .utc(
-                            moment(
-                              formatDate(event.time),
-                              "DD/MM/YYYY HH:mm:ss"
-                            ).diff(
-                              moment(
-                                formatDate(game.time_start),
-                                "DD/MM/YYYY HH:mm:ss"
-                              )
-                            )
-                          )
-                          .format("mm")}
-                        '
-                      </span>{" "}
-                      | {event.eventType}
+                      <EventTime
+                        time={event.time}
+                        id={game._id}
+                        gameTime={game.time_start}
+                      />
+                      ' | {event.eventType}
                     </Info>
                     <div>
                       {user && user.role === "admin" && (
@@ -189,32 +186,15 @@ getUser()
             {eventData &&
               awayEvents.map((event) => {
                 return (
-                  <EventRow
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                    key={event._id}
-                  >
-                    <p>
-                      <span>
-                        {moment
-                          .utc(
-                            moment(
-                              formatDate(event.time),
-                              "DD/MM/YYYY HH:mm:ss"
-                            ).diff(
-                              moment(
-                                formatDate(game.time_start),
-                                "DD/MM/YYYY HH:mm:ss"
-                              )
-                            )
-                          )
-                          .format("mm")}
-                        '
-                      </span>{" "}
-                      | {event.eventType}
-                    </p>
+                  <EventRow key={event._id}>
+                    <Info>
+                      <EventTime
+                        time={event.time}
+                        id={game._id}
+                        gameTime={game.time_start}
+                      />
+                      ' | {event.eventType}
+                    </Info>
                     <div>
                       <EditIcon onClick={() => handleOpen(event._id)} />
 
@@ -245,6 +225,7 @@ getUser()
               <EditEventForm
                 onSubmit={handleUpdateEvent}
                 id={router.query.id}
+                gameStart={game.time_start}
               />
               <pre>
                 {error &&
