@@ -19,6 +19,7 @@ export const Title = styled.p`
     font-size: 1.5em;
 
 `;
+export const SubTitle=styled.p``
 export const Image = styled.img`
   height: 160px;
   width: 160px;
@@ -44,7 +45,14 @@ export const Button = styled.button`
   }
 `;
 
-export const UserContainer=styled.div`
-margin-top:87px;
-margin-bottom:87px;
-`
+export const UserContainer = styled.div`
+  width: 60vw;
+
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 0;
+  margin: 87px auto;
+  @media (max-width: 900px) {
+    grid-template-columns:100%;
+  }
+`;

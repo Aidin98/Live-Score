@@ -8,6 +8,7 @@ import Redirect from "../../../components/Redirect";
 import { Container, Span, Title } from "../../../styles/LoginStyle";
 import EditOwnUserForm from "../../../components/forms/EditOwnUserForm";
 import withApollo from "../../../hoc/withApollo";
+import withAuth from '../../../hoc/withAuth'
 import BaseLayout from "../../../layout/BaseLayout";
 import { FormTitle } from "../../../styles/FormStyles";
 import { useRouter } from "next/router";
@@ -42,4 +43,4 @@ return
   );
 };
 
-export default withApollo(editPage);
+export default withApollo(withAuth(editPage));

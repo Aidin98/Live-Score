@@ -79,7 +79,7 @@ export const GameResult = styled.h4`
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center
+  justify-content:center;
   @media (max-width: 600px) {
     font-size:0.7rem;
   }

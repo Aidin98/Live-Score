@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import { Card, Title,Image,Button } from '../styles/UserCardStyles'
+import { Card, Title,Image,Button,SubTitle } from '../styles/UserCardStyles'
 import EditUserForm from '../components/forms/EditUserForm'
 import { useDeleteUser, useUpdateUSer } from '../apollo/actions';
-import { toast } from "react-toastify";
+
 import { useStyles } from '../styles/ModalSyles';
 import { Span } from '../styles/LoginStyle';
 
@@ -47,9 +47,7 @@ const handleDeleteUser=()=>{
         alt="Person"
       />
       <Title>{email}</Title>
-      <div class="grid-container">
-        <div class="grid-child-posts">Role : {role}</div>
-      </div>
+      <SubTitle>Role : {role}</SubTitle>
 
       <Button onClick={() => handleOpen()}>Edit User</Button>
 
