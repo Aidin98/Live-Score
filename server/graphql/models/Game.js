@@ -21,9 +21,9 @@ class Game extends BaseModel {
     }
 
     data.added_by = this.user;
-   {/* if(data.time_start<data.currentTime){
+   if(data.time_start<data.currentTime){
       throw new Error("Invalid Date, Date should be greater that current Date")
-    }*/}
+    }
     return this.Model.create(data);
   }
 

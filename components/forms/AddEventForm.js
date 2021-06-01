@@ -1,60 +1,76 @@
 import React, { useEffect, useState } from "react";
-import { FormGroup, Label, Input, Message, Button, LForm,Select } from "../../styles/FormStyles";
-import { useForm,Controller } from "react-hook-form";
+import {
+  FormGroup,
+  Label,
+  Input,
+  Message,
+  Button,
+  LForm,
+  Select,
+} from "../../styles/FormStyles";
+import { useForm, Controller } from "react-hook-form";
 import { useGetEventsByGameId } from "../../apollo/actions";
 import "react-clock/dist/Clock.css";
 import "react-time-picker/dist/TimePicker.css";
 import TP, { TimePickerProps } from "react-time-picker/dist/entry.nostyle";
-import { dateDifferenceMinute, formatDate, getCurrentTime, getDateFormat, getDateOnly, getTimeOnly } from "../../utils/dateFormat";
+import {
+  dateDifferenceMinute,
+  formatDate,
+  getCurrentTime,
+  getDateFormat,
+  getDateOnly,
+  getTimeOnly,
+} from "../../utils/dateFormat";
 import moment from "moment";
 
-const AddEventForm = ({ onSubmit, user,id,gameStart }) => {
-  const { handleSubmit, register,control,setValue } = useForm();
+const AddEventForm = ({ onSubmit, user, id, gameStart }) => {
+  const { handleSubmit, register, control, setValue } = useForm();
   const [state, setState] = useState("halftime_start");
   const { data } = useGetEventsByGameId({ variables: { id: id } });
 
-const [value, onChange] = useState();
+  const [value, onChange] = useState();
 
- const doesInclude=(type)=>{
-    if(data && data.eventsByGameId){
-      const{eventsByGameId}=data
-      let eventTypes =[]
-       eventsByGameId.forEach((element) => eventTypes.push({eventType:element.eventType,time:element.time}));
-        for (let i = 0; i < eventTypes.length; i++) {
-          if(eventTypes[i].eventType===type){
-            return eventTypes[i]
-          }
-
+  const doesInclude = (type) => {
+    if (data && data.eventsByGameId) {
+      const { eventsByGameId } = data;
+      let eventTypes = [];
+      eventsByGameId.forEach((element) =>
+        eventTypes.push({ eventType: element.eventType, time: element.time })
+      );
+      for (let i = 0; i < eventTypes.length; i++) {
+        if (eventTypes[i].eventType === type) {
+          return eventTypes[i];
         }
-        return false
+      }
+      return false;
     }
-  }
-  const hlaftime_start=doesInclude('halftime_start')
-  console.log('halftime je ',hlaftime_start)
-  const check=()=>{
-    if(state !== "halftime_start" &&
-        state !== "halftime_end" &&
-        state !== "game_end"){
-          return true
-        }else{
-          return false
-        }
-  }
-  useEffect(()=>{
-    register({name:'time'})
+  };
+  const hlaftime_start = doesInclude("halftime_start");
+  console.log("halftime je ", hlaftime_start);
+  const check = () => {
+    if (
+      state !== "halftime_start" &&
+      state !== "halftime_end" &&
+      state !== "game_end"
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  useEffect(() => {
+    register({ name: "time" });
+  });
+  const a = new Date(getDateFormat(gameStart));
 
-  })
-  const a =new Date(getDateFormat(gameStart));
+  const after = a.setHours(a.getHours() + 2);
 
-
-  const after =a.setHours(a.getHours() + 2);
-
-const eventContitons=(minute)=>{
-  if(dateDifferenceMinute(getCurrentTime(),gameStart)>minute) {
-    return true
-  }
-  return false
-}
+  const eventContitons = (minute) => {
+    if (dateDifferenceMinute(getCurrentTime(), gameStart) > minute) {
+      return true;
+    }
+    return false;
+  };
   return (
     <LForm onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
@@ -142,7 +158,3 @@ const eventContitons=(minute)=>{
 
 export default AddEventForm;
 
-
-
-//
-//

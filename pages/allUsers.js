@@ -1,14 +1,14 @@
-import withApollo from '../hoc/withApollo'
-import React from 'react'
-import { useGetAllUsers } from '../apollo/actions'
-import BaseLayout from '../layout/BaseLayout'
-import UserCard from '../components/UserCard'
-import { UserContainer } from '../styles/UserCardStyles'
-import withAuth from '../hoc/withAuth'
+import withApollo from "../hoc/withApollo";
+import React from "react";
+import { useGetAllUsers } from "../apollo/actions";
+import BaseLayout from "../layout/BaseLayout";
+import UserCard from "../components/UserCard";
+import { UserContainer } from "../styles/UserCardStyles";
+import withAuth from "../hoc/withAuth";
 
 const allUsers = () => {
-  const {data}=useGetAllUsers()
-   const users = (data && data.users) || [];
+  const { data } = useGetAllUsers();
+  const users = (data && data.users) || [];
 
   return (
     <BaseLayout>
@@ -26,7 +26,6 @@ const allUsers = () => {
       </UserContainer>
     </BaseLayout>
   );
-}
+};
 
-export default withApollo(withAuth(allUsers,['admin']))
-
+export default withApollo(withAuth(allUsers, ["admin"]));

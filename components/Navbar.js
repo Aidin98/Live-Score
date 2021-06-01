@@ -42,12 +42,12 @@ const handleButtonClick=()=>{
         <AppLink href="/registration">
           {!user && <Button>SIGN UP</Button>}
         </AppLink>
-        <AppLink href="/registration">
+        <AppLink href='/addGame'>
           {user && user.role === "admin" && (
-            <Button onClick={() => router.push("/addGame")}>Add Game</Button>
+            <Button>Add Game</Button>
           )}
         </AppLink>
-        <Hamburger onClick={handleButtonClick}>☰</Hamburger>
+       {user && <Hamburger onClick={handleButtonClick}>☰</Hamburger>}
         {isActive && (
           <DropdownContent>
             <UL>

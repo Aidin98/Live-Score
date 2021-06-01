@@ -1,21 +1,25 @@
+import Head from "next/head";
 
-import Head from 'next/head'
+import { useEffect, useState } from "react";
 
-import { useEffect, useState } from 'react';
+import BaseLayout from "../layout/BaseLayout";
+import Link from "next/link";
+import {
+  Container,
+  ContainerGames,
+  TitlePage,
+  GameTeamName,
+  GameInfo,
+  GameTime,
+} from "../styles/IndexPageStyles";
 
-import BaseLayout from '../layout/BaseLayout';
-import Link from 'next/link'
-import { Container, ContainerGames, TitlePage, GameTeamName, GameInfo, GameTime } from '../styles/IndexPageStyles';
+import { useGetGames, useCreateGame, useLazyGetUser } from "../apollo/actions";
+import withApollo from "../hoc/withApollo";
 
+import { formatDate, golas, sortGames } from "../utils/dateFormat";
+import Result from "../components/Result";
 
-import { useGetGames, useCreateGame, useLazyGetUser } from '../apollo/actions';
-import withApollo from '../hoc/withApollo';
-
-import { formatDate, golas, sortGames } from '../utils/dateFormat';
-import Result from '../components/Result';
-
-import { useRouter } from 'next/router';
-
+import { useRouter } from "next/router";
 
 const AppLink = ({ children, href, as }) => (
   <Link href={href} as={as}>
@@ -23,28 +27,26 @@ const AppLink = ({ children, href, as }) => (
   </Link>
 );
 
- function Home() {
-  
-  const {data:gameData}=useGetGames()
- let  games=(gameData && gameData.games) || []
- games=sortGames(games)
+function Home() {
+  const { data: gameData } = useGetGames();
+  let games = (gameData && gameData.games) || [];
+  games = sortGames(games);
 
   const [user, setUser] = useState();
 
-  const [getUser, { data:dataU, error:errorU }] = useLazyGetUser();
+  const [getUser, { data: dataU, error: errorU }] = useLazyGetUser();
 
-   useEffect(() => {
-     getUser();
-   }, []);
-   if (dataU) {
-     if (dataU.user && !user) {
-       setUser(dataU.user);
-     }
-     if (!dataU.user && user) {
-       setUser(null);
-     }
-   }
-
+  useEffect(() => {
+    getUser();
+  }, []);
+  if (dataU) {
+    if (dataU.user && !user) {
+      setUser(dataU.user);
+    }
+    if (!dataU.user && user) {
+      setUser(null);
+    }
+  }
 
   return (
     <BaseLayout page="Home">
@@ -55,7 +57,6 @@ const AppLink = ({ children, href, as }) => (
       </Head>
 
       <Container>
-
         <TitlePage>Welcome to Live Score Dasboard</TitlePage>
         {games.map((game) => {
           return (
@@ -78,4 +79,4 @@ const AppLink = ({ children, href, as }) => (
   );
 }
 
-export default withApollo(Home)
+export default withApollo(Home);

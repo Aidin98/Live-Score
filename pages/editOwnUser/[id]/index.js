@@ -4,32 +4,30 @@ import { useEditOwnUser, useGetUser, useSignIn } from "../../../apollo/actions";
 
 import Redirect from "../../../components/Redirect";
 
-
 import { Container, Span, Title } from "../../../styles/LoginStyle";
 import EditOwnUserForm from "../../../components/forms/EditOwnUserForm";
 import withApollo from "../../../hoc/withApollo";
-import withAuth from '../../../hoc/withAuth'
+import withAuth from "../../../hoc/withAuth";
 import BaseLayout from "../../../layout/BaseLayout";
 import { FormTitle } from "../../../styles/FormStyles";
 import { useRouter } from "next/router";
 
 const editPage = () => {
-const router=useRouter()
-const [editOwnUser,{data,error}]=useEditOwnUser()
-const id = router.query.id;
-console.log('id iz linka je ',id)
-const handleEditUser=async(data)=>{
-try {
-editOwnUser({variables:{id,...data}})
-
-} catch (error) {
-return
-}
-}
+  const router = useRouter();
+  const [editOwnUser, { data, error }] = useEditOwnUser();
+  const id = router.query.id;
+  console.log("id iz linka je ", id);
+  const handleEditUser = async (data) => {
+    try {
+      editOwnUser({ variables: { id, ...data } });
+    } catch (error) {
+      return;
+    }
+  };
   return (
     <BaseLayout>
       <Container>
-        <FormTitle>EDIT PAGE</FormTitle>
+        <FormTitle>EDIT ACCOUNT</FormTitle>
         <EditOwnUserForm onSubmit={handleEditUser} />
         <pre>
           {error &&

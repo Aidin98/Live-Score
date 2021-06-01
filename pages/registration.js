@@ -10,21 +10,18 @@ import { Span } from "../styles/LoginStyle";
 import { Container, Title } from "../styles/RegisterStyle";
 
 const registration = () => {
- const [signUp, { data, loading, error }] = useSignUp();
+  const [signUp, { data, loading, error }] = useSignUp();
 
-const handleSignUp=async(signUpData)=>{
-  try {
-    await signUp({ variables: signUpData });
-  } catch (error) {}
-
-}
+  const handleSignUp = async (signUpData) => {
+    try {
+      await signUp({ variables: signUpData });
+    } catch (error) {}
+  };
   return (
     <BaseLayout>
       <Container>
         <FormTitle>REGISTER HERE</FormTitle>
-        <RegisterForm
-          onSubmit={handleSignUp}
-        />
+        <RegisterForm onSubmit={handleSignUp} />
         <pre>
           {error &&
             error.graphQLErrors.map(({ message }, i) => (

@@ -1,9 +1,15 @@
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { useDeleteEvent,useGetEventsByGameId, useGetGameById, useLazyGetUser, useUpdateEvent } from '../../apollo/actions'
-import withApollo from '../../hoc/withApollo'
-import BaseLayout from '../../layout/BaseLayout'
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import {
+  useDeleteEvent,
+  useGetEventsByGameId,
+  useGetGameById,
+  useLazyGetUser,
+  useUpdateEvent,
+} from "../../apollo/actions";
+import withApollo from "../../hoc/withApollo";
+import BaseLayout from "../../layout/BaseLayout";
 import {
   EventContainer,
   SingleGameContainer,
@@ -15,21 +21,32 @@ import {
   Info,
 } from "../../styles/GamePageStyle";
 import EditIcon from "@material-ui/icons/Edit";
-import { AddGameButton, ContainerGames, GameInfo, GameTeamName, GameTime } from '../../styles/IndexPageStyles'
+import {
+  AddGameButton,
+  ContainerGames,
+  GameInfo,
+  GameTeamName,
+  GameTime,
+} from "../../styles/IndexPageStyles";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import { useStyles } from '../../styles/ModalSyles'
+import { useStyles } from "../../styles/ModalSyles";
 
-import EditEventForm from '../../components/forms/EditEventForm'
-import {  formatDate, formatEventDate, sortEvents } from '../../utils/dateFormat'
-import Result from '../../components/Result'
-import { Span } from '../../styles/LoginStyle'
+import EditEventForm from "../../components/forms/EditEventForm";
+import {
+  formatDate,
+  formatEventDate,
+  getCurrentTime,
+  sortEvents,
+} from "../../utils/dateFormat";
+import Result from "../../components/Result";
+import { Span } from "../../styles/LoginStyle";
 
-import withAuth from '../../hoc/withAuth'
-import EventTime from '../../components/EventTime'
-import { Title } from '../../styles/UserCardStyles'
+import withAuth from "../../hoc/withAuth";
+import EventTime from "../../components/EventTime";
+import { Title } from "../../styles/UserCardStyles";
 
 const AppLink = ({ children, href, as }) => (
   <Link href={href} as={as}>
@@ -37,11 +54,11 @@ const AppLink = ({ children, href, as }) => (
   </Link>
 );
 const GamePage = () => {
-  const [user,setUser]=useState()
+  const [user, setUser] = useState();
   const classes = useStyles();
   const router = useRouter();
   const [deleteEvent] = useDeleteEvent({ id: router.query.id });
-  const [getUser,{data:dataU,error:errorU}]=useLazyGetUser()
+  const [getUser, { data: dataU, error: errorU }] = useLazyGetUser();
   const { data: eventData } = useGetEventsByGameId({
     variables: { id: router.query.id },
   });
@@ -53,21 +70,21 @@ const GamePage = () => {
   const [idToUpdate, setIdToUpdate] = useState();
   const game = (gameData && gameData.gameById) || {};
   const events = (eventData && eventData.eventsByGameId) || [];
-  const homeEvents=sortEvents(events.filter((p)=>p.team==='home'))
+  const homeEvents = sortEvents(events.filter((p) => p.team === "home"));
   const awayEvents = sortEvents(events.filter((p) => p.team === "away"));
-  const globalEvents=events.filter((p)=>p.team==='global')
+  const globalEvents = events.filter((p) => p.team === "global");
 
-useEffect(()=>{
-getUser()
-},[])
- if (dataU) {
-   if (dataU.user && !user) {
-     setUser(dataU.user);
-   }
-   if (!dataU.user && user) {
-     setUser(null);
-   }
- }
+  useEffect(() => {
+    getUser();
+  }, []);
+  if (dataU) {
+    if (dataU.user && !user) {
+      setUser(dataU.user);
+    }
+    if (!dataU.user && user) {
+      setUser(null);
+    }
+  }
   const handleOpen = (id) => {
     setOpen(true);
     setIdToUpdate(id);
@@ -97,39 +114,44 @@ getUser()
       return;
     }
   };
-    const doesInclude=()=>{
-      for (let i = 0; i < events.length; i++) {
-          if(events[i].eventType==='game_end'){
-            return true
-          }
+  const doesInclude = () => {
+    for (let i = 0; i < events.length; i++) {
+      if (events[i].eventType === "game_end") {
+        return true;
       }
-      return false
     }
-    const niceTitle=(type)=>{
-      if(type==='game_end'){
-        return 'Game End :'
-      }
-       if (type === "halftime_start") {
-         return "Halftime Start :";
-       }
-        if (type === "halftime_end") {
-          return "Halftime End :";
-        }
+    return false;
+  };
+  const niceTitle = (type) => {
+    if (type === "game_end") {
+      return "Game End :";
     }
+    if (type === "halftime_start") {
+      return "Halftime Start :";
+    }
+    if (type === "halftime_end") {
+      return "Halftime End :";
+    }
+  };
   return (
     <BaseLayout>
       <SingleGameContainer>
         <GamePageTitle>Game Informations</GamePageTitle>
-        {user && user.role === "admin" && !doesInclude() && (
-          <div>
-            <AppLink href="/[id]/newEvent" as={`/${router.query.id}/newEvent`}>
-              <AddGameButton style={{ margin: "auto" }}>
-                Add Event
-              </AddGameButton>
-            </AppLink>
-
-          </div>
-        )}
+        {user &&
+          user.role === "admin" &&
+          !doesInclude() &&
+          game.time_start < getCurrentTime() && (
+            <div>
+              <AppLink
+                href="/[id]/newEvent"
+                as={`/${router.query.id}/newEvent`}
+              >
+                <AddGameButton style={{ margin: "auto" }}>
+                  Add Event
+                </AddGameButton>
+              </AppLink>
+            </div>
+          )}
         {gameData && (
           <ContainerGames>
             <GameTeamName>{game.home_team}</GameTeamName>
@@ -240,6 +262,6 @@ getUser()
       </SingleGameContainer>
     </BaseLayout>
   );
-}
+};
 
 export default withApollo(withAuth(GamePage));

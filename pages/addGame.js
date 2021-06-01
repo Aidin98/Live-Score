@@ -1,11 +1,6 @@
 import React from "react";
 
-
-
 import { useRouter } from "next/router";
-
-
-
 
 import { useCreateGame } from "../apollo/actions";
 import AddGameForm from "../components/forms/AddGameForm";
@@ -16,17 +11,16 @@ import { Container, Span } from "../styles/LoginStyle";
 import withAuth from "../hoc/withAuth";
 import { getCurrentTime } from "../utils/dateFormat";
 
-
 const addGame = () => {
   const router = useRouter();
   const id = router.query.id;
   const [createGame, { error }] = useCreateGame();
 
   const handleCreateGame = async (data) => {
-    data.currentTime=getCurrentTime()
+    data.currentTime = getCurrentTime();
     try {
       if (data) {
-        await createGame({ variables: {...data } });
+        await createGame({ variables: { ...data } });
         router.push(`/`);
       }
     } catch (e) {
@@ -35,9 +29,9 @@ const addGame = () => {
   };
   return (
     <BaseLayout>
-      <Container >
+      <Container>
         <FormTitle>Add New Event</FormTitle>
-        <AddGameForm onSubmit={handleCreateGame}/>
+        <AddGameForm onSubmit={handleCreateGame} />
         <pre>
           {error &&
             error.graphQLErrors.map(({ message }, i) => (

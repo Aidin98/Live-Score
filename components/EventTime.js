@@ -1,8 +1,7 @@
-import React from 'react'
-import { dateDifferenceMinute, golas } from '../utils/dateFormat'
+import React from "react";
+import { dateDifferenceMinute, golas } from "../utils/dateFormat";
 
-
-const EventTime = ({time,id,gameTime}) => {
+const EventTime = ({ time, id, gameTime }) => {
   var gameResult = {};
   gameResult = golas(id);
   const checkEvent = (eventyType, id) => {
@@ -18,7 +17,6 @@ const EventTime = ({time,id,gameTime}) => {
       !checkEvent("halftime_end", id) ||
       (checkEvent("halftime_end", id) && !checkEvent("halftime_start", id))
     ) {
-     
       return dateDifferenceMinute(time, gameTime);
     }
     if (checkEvent("halftime_end", id) && checkEvent("halftime_start", id)) {
@@ -29,11 +27,7 @@ const EventTime = ({time,id,gameTime}) => {
       return current + 45;
     }
   };
-  return (
-    <span>
-      {currentEventMinute()}
-    </span>
-  )
-}
+  return <span>{currentEventMinute()}</span>;
+};
 
-export default EventTime
+export default EventTime;
