@@ -27,6 +27,7 @@ exports.createApolloServer = () => {
     signIn(input: SignInInput): User
     signOut: Boolean
     updateUser(id:ID,input:UpdateUserInput):User
+    editOwnUser(id:ID,input:editOwnUserInput):User
     deleteUser(id:ID):ID
     createGame(input:GameInput):Game
     createGameEvent(id:ID,input:EventInput):Event

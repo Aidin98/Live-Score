@@ -45,6 +45,7 @@ export const DropdownContent = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.04);
   box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
   background:white;
+ 
 `;
 export const Hamburger = styled.button`
   border: 0;
@@ -57,6 +58,6 @@ export const Hamburger = styled.button`
 export const Button = styled.button`
   border-radius: 25px;
   padding: 5px 12px;
- 
+
   margin-right:10px;
 `;

@@ -43,13 +43,17 @@ const handleButtonClick=()=>{
           {!user && <Button>SIGN UP</Button>}
         </AppLink>
         <AppLink href="/registration">
-          {user && user.role==='admin' && <Button onClick={()=>router.push('/addGame')}>Add Game</Button>}
+          {user && user.role === "admin" && (
+            <Button onClick={() => router.push("/addGame")}>Add Game</Button>
+          )}
         </AppLink>
         <Hamburger onClick={handleButtonClick}>☰</Hamburger>
         {isActive && (
           <DropdownContent>
             <UL>
-              <LI>Edit Accout</LI>
+              <LI>
+                <AppLink href="/editOwnUser/[id]" as={`/editOwnUser/${user._id}`}>Edit Account</AppLink>
+              </LI>
               {!user ? (
                 <LI>
                   <AppLink href="/login">Log in</AppLink>

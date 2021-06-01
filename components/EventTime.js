@@ -18,17 +18,14 @@ const EventTime = ({time,id,gameTime}) => {
       !checkEvent("halftime_end", id) ||
       (checkEvent("halftime_end", id) && !checkEvent("halftime_start", id))
     ) {
-      console.log(
-        "proso je if i minuta je",
-        dateDifferenceMinute(time, gameTime)
-      );
+     
       return dateDifferenceMinute(time, gameTime);
     }
     if (checkEvent("halftime_end", id) && checkEvent("halftime_start", id)) {
       const halftimeStart = checkEvent("halftime_start", id);
 
       const current = dateDifferenceMinute(time, halftimeStart.time);
-        console.log('proso je if drugo i minuta je ',current+45)
+
       return current + 45;
     }
   };

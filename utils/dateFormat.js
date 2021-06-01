@@ -61,7 +61,7 @@ return Math.round(minutes);
 }
 
 export const checkEvent = (eventyType,id) => {
- 
+
   const gameResult=golas(id)
   for (let i = 0; i < gameResult.events.length; i++) {
     if (gameResult.events[i].eventType === eventyType)
@@ -69,33 +69,3 @@ export const checkEvent = (eventyType,id) => {
   }
   return false;
 };
-export const currentMinute = (date) => {
-  if (!checkEvent("halftime_end")) {
-    return dateDifferenceMinute(getCurrentTime(), date);
-  }
-  if (checkEvent("halftime_end") && checkEvent("halftime_start")) {
-    const halftimeStart = checkEvent("halftime_start");
-
-    const current = dateDifferenceMinute(getCurrentTime(), halftimeStart.time);
-    return current + 45;
-  }
-  if (dateDifferenceMinute(getCurrentTime(), date) > 120) {
-    return "Game End";
-  }
-};
-export const currentEventMinute=({time,id,gameTime})=>{
-
- if (
-   !checkEvent("halftime_end", id) ||
-   (checkEvent("halftime_end", id) && !checkEvent("halftime_start", id))
- ) {
-
-   return dateDifferenceMinute(time, gameTime);
- }
- if (checkEvent("halftime_end",id) && checkEvent("halftime_start",id)) {
-   const halftimeStart = checkEvent("halftime_start",id);
-
-   const current = dateDifferenceMinute(time, halftimeStart.time);
-   return current + 45;
- }
-}

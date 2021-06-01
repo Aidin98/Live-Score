@@ -6,7 +6,7 @@ import { useCreateGameEvent, useGetEventsByGameId, useGetGameById } from '../../
 import { useRouter } from 'next/router';
 import withApollo from '../../hoc/withApollo';
 import { EventForm } from '../../styles/GamePageStyle';
-import { FormTitle } from '../../components/forms/Forms';
+import { FormTitle } from '../../styles/FormStyles';
 import { Container, Span } from '../../styles/LoginStyle';
 import withAuth from '../../hoc/withAuth';
 

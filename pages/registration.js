@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useSignUp, useGetUser, useSignIn } from "../apollo/actions";
-import { FormTitle } from "../components/forms/Forms";
-import LoginForm from "../components/forms/LoginForm";
+import { FormTitle } from "../styles/FormStyles";
+import RegisterForm from "../components/forms/LoginForm";
 import Redirect from "../components/Redirect";
 import withApollo from "../hoc/withApollo";
 import BaseLayout from "../layout/BaseLayout";
@@ -22,7 +22,7 @@ const handleSignUp=async(signUpData)=>{
     <BaseLayout>
       <Container>
         <FormTitle>REGISTER HERE</FormTitle>
-        <LoginForm
+        <RegisterForm
           onSubmit={handleSignUp}
         />
         <pre>

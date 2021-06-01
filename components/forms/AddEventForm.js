@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormGroup, Label, Input, Message, Button, LForm,Select } from "./Forms";
+import { FormGroup, Label, Input, Message, Button, LForm,Select } from "../../styles/FormStyles";
 import { useForm,Controller } from "react-hook-form";
 import { useGetEventsByGameId } from "../../apollo/actions";
 import "react-clock/dist/Clock.css";
@@ -30,6 +30,7 @@ const [value, onChange] = useState();
     }
   }
   const hlaftime_start=doesInclude('halftime_start')
+  console.log('halftime je ',hlaftime_start)
   const check=()=>{
     if(state !== "halftime_start" &&
         state !== "halftime_end" &&
@@ -106,6 +107,7 @@ const eventContitons=(minute)=>{
 
       <FormGroup>
         <Label>Time : </Label>
+
         {gameStart && (
           <TP
             value={value}
@@ -120,14 +122,13 @@ const eventContitons=(minute)=>{
             }}
             locale="sv-sv"
             minTime={
-              doesInclude("hlaftime_start")
+              !hlaftime_start
                 ? getTimeOnly(new Date(getDateFormat(gameStart)))
                 : getTimeOnly(new Date(getDateFormat(hlaftime_start.time)))
             }
             maxTime={getTimeOnly(a)}
           />
         )}
-
       </FormGroup>
       <FormGroup>
         <Label htmlFor="label">Additional Information :</Label>
@@ -140,3 +141,8 @@ const eventContitons=(minute)=>{
 };
 
 export default AddEventForm;
+
+
+
+//
+//

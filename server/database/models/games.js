@@ -26,6 +26,10 @@ const gameSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  currentTime:{
+    type:Date,
+    required:true
+  }
 });
 
 

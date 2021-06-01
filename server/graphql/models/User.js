@@ -55,6 +55,12 @@ class User extends BaseModel {
       runValidators: true,
     });
   }
+  findAndEditOwnUser(id,data){
+     return this.Model.findOneAndUpdate({ _id: id }, data, {
+       new: true,
+       runValidators: true,
+     });
+  }
   findAndDelete(id) {
      if (!this.user || this.user.role !== "admin") {
        throw new Error("You need to be admin user to delete a user!");

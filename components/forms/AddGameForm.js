@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { FormGroup, Label, Input, Message, Button, LForm } from "./Forms";
+import { FormGroup, Label, Input, Message, Button, LForm } from "../../styles/FormStyles";
 import { useForm } from "react-hook-form";
-import { Title } from "../UserCardStyle";
+import { Title } from "../../styles/UserCardStyles";
 import TextField from "@material-ui/core/TextField";
+import { getCurrentTime } from "../../utils/dateFormat";
 const AddGameForm = ({ onSubmit, user }) => {
   const [time_start, setTimeStart] = useState("");
   const { handleSubmit, register,setValue } = useForm();
   useEffect(() => {
     register({ name: "time_start" });
-    
+
   },[]);
  console.log('izabrano vrijeme je ',time_start)
   return (
@@ -34,6 +35,7 @@ const AddGameForm = ({ onSubmit, user }) => {
           InputLabelProps={{
             shrink: true,
           }}
+          mindatetime={getCurrentTime()}
         />
       </FormGroup>
       <FormGroup>

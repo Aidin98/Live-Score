@@ -11,9 +11,10 @@ import { useCreateGame } from "../apollo/actions";
 import AddGameForm from "../components/forms/AddGameForm";
 import BaseLayout from "../layout/BaseLayout";
 import withApollo from "../hoc/withApollo";
-import { FormTitle } from "../components/forms/Forms";
+import { FormTitle } from "../styles/FormStyles";
 import { Container, Span } from "../styles/LoginStyle";
 import withAuth from "../hoc/withAuth";
+import { getCurrentTime } from "../utils/dateFormat";
 
 
 const addGame = () => {
@@ -22,6 +23,7 @@ const addGame = () => {
   const [createGame, { error }] = useCreateGame();
 
   const handleCreateGame = async (data) => {
+    data.currentTime=getCurrentTime()
     try {
       if (data) {
         await createGame({ variables: {...data } });

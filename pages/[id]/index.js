@@ -21,7 +21,7 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { useStyles } from '../../styles/ModalSyles'
-import { Title } from '../../components/UserCardStyle'
+
 import EditEventForm from '../../components/forms/EditEventForm'
 import {  formatDate, formatEventDate, sortEvents } from '../../utils/dateFormat'
 import Result from '../../components/Result'
@@ -29,6 +29,7 @@ import { Span } from '../../styles/LoginStyle'
 
 import withAuth from '../../hoc/withAuth'
 import EventTime from '../../components/EventTime'
+import { Title } from '../../styles/UserCardStyles'
 
 const AppLink = ({ children, href, as }) => (
   <Link href={href} as={as}>

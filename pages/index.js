@@ -5,10 +5,9 @@ import { useEffect, useState } from 'react';
 
 import BaseLayout from '../layout/BaseLayout';
 import Link from 'next/link'
-import { Container, ContainerGames, TitlePage,AddGameButton, GameTeamName, GameInfo, GameTime, GameResult } from '../styles/IndexPageStyles';
-import { useStyles } from '../styles/ModalSyles';
-import { Title } from '../components/UserCardStyle';
-import dateFormat from 'dateformat'
+import { Container, ContainerGames, TitlePage, GameTeamName, GameInfo, GameTime } from '../styles/IndexPageStyles';
+
+
 import { useGetGames, useCreateGame, useLazyGetUser } from '../apollo/actions';
 import withApollo from '../hoc/withApollo';
 
@@ -25,8 +24,7 @@ const AppLink = ({ children, href, as }) => (
 );
 
  function Home() {
-   const router=useRouter()
-   const [createGame,{error}]=useCreateGame()
+  
   const {data:gameData}=useGetGames()
  let  games=(gameData && gameData.games) || []
  games=sortGames(games)

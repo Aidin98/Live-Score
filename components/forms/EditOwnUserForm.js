@@ -1,8 +1,15 @@
 import React from "react";
-import { FormGroup, Label, Input, Message, Button, LForm } from "../../styles/FormStyles";
+import {
+  FormGroup,
+  Label,
+  Input,
+  Message,
+  Button,
+  LForm,
+} from "../../styles/FormStyles";
 import { useForm } from "react-hook-form";
 import { Title } from "../../styles/UserCardStyles";
-const EditUserForm = ({ onSubmit,user }) => {
+const EditOwnUserForm = ({ onSubmit, user }) => {
   const { handleSubmit, register } = useForm();
 
   return (
@@ -13,8 +20,8 @@ const EditUserForm = ({ onSubmit,user }) => {
         <Input ref={register} type="email" name="email" id="email" />
       </FormGroup>
       <FormGroup>
-        <Label htmlFor="label">Role</Label>
-        <Input ref={register} type="text" name="role" id="role" />
+        <Label htmlFor="label">Password</Label>
+        <Input ref={register} type="password" name="password" id="password" />
       </FormGroup>
 
       <Button type="submit">Edit</Button>
@@ -22,4 +29,4 @@ const EditUserForm = ({ onSubmit,user }) => {
   );
 };
 
-export default EditUserForm;
+export default EditOwnUserForm;

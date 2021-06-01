@@ -4,6 +4,11 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    background-image: url('https://res.cloudinary.com/dmva5v21w/image/upload/e_brightness_hsb,o_24/v1622469159/vector_kgg4of.jpg');
+      background-position: center;
+  background-repeat: no-repeat;
+  background-size: 40vw;
+ min-height: 80vh;
 }
 
 a {

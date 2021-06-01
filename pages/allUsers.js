@@ -3,7 +3,7 @@ import React from 'react'
 import { useGetAllUsers } from '../apollo/actions'
 import BaseLayout from '../layout/BaseLayout'
 import UserCard from '../components/UserCard'
-import { UserContainer } from '../components/UserCardStyle'
+import { UserContainer } from '../styles/UserCardStyles'
 import withAuth from '../hoc/withAuth'
 
 const allUsers = () => {

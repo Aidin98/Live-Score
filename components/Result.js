@@ -18,6 +18,9 @@ const Result = ({id,start_time}) => {
   };
   let check=checkEvent("game_end",id)
   const currentMinute = (date) => {
+    if(date>getCurrentTime()){
+      return 'Not Started'
+    }
     if (!checkEvent("halftime_end")) {
       return dateDifferenceMinute(getCurrentTime(), date);
     }
@@ -32,9 +35,7 @@ const Result = ({id,start_time}) => {
     }else{
       return 'Half Time'
     }
-    if (dateDifferenceMinute(getCurrentTime(), date) > 120) {
-      return "Game End";
-    }
+
   };
 if(gameResult){
   return (

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useLazyQuery } from "@apollo/react-hooks";
-import { ADD_GAME,ADD_GAME_EVENT,DELETE_EVENT,DELETE_USER, EVENTS_BY_GAMEID, GET_ALL_USERS, GET_GAMES, GET_GAME_BY_ID, GET_USER, SIGN_IN, SIGN_OUT, SIGN_UP, UPDATE_EVENT, UPDATE_USER } from "../queries";
+import { ADD_GAME,ADD_GAME_EVENT,DELETE_EVENT,DELETE_USER, EDIT_OWN_USER, EVENTS_BY_GAMEID, GET_ALL_USERS, GET_GAMES, GET_GAME_BY_ID, GET_USER, SIGN_IN, SIGN_OUT, SIGN_UP, UPDATE_EVENT, UPDATE_USER } from "../queries";
 //User Starts
 
 export const useSignIn = () =>
@@ -25,6 +25,7 @@ export const useSignIn = () =>
   export const useLazyGetUser = () => useLazyQuery(GET_USER);
   export const useGetAllUsers=()=>useQuery(GET_ALL_USERS)
 export const useUpdateUSer=()=>useMutation(UPDATE_USER)
+export const useEditOwnUser=()=>useMutation(EDIT_OWN_USER)
 export const useDeleteUser = () =>
   useMutation(DELETE_USER, {
     update(cache, { data: { deleteUser } }) {
@@ -41,7 +42,7 @@ export const useDeleteUser = () =>
       });
     },
   });
-  
+
 //User Ends
 
 

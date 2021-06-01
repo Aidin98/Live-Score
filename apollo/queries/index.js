@@ -56,13 +56,15 @@ export const UPDATE_USER = gql`
   mutation UpdateUser(
     $id: ID
   $email:String!
-  $role:String!
+  $role:String
+
   ) {
     updateUser(
       id: $id
       input: {
        email:$email
        role:$role
+
       }
     ) {
         email
@@ -71,7 +73,15 @@ export const UPDATE_USER = gql`
     }
   }
 `;
-
+export const EDIT_OWN_USER = gql`
+  mutation EditOwnUser($id: ID, $email: String!, $password: String!) {
+    editOwnUser(id: $id, input: { email: $email, password: $password }) {
+      email
+      role
+      _id
+    }
+  }
+`;
 export const DELETE_USER=gql`
 mutation DeleteUser($id:ID){
   deleteUser(id:$id)
@@ -90,7 +100,7 @@ export const ADD_GAME = gql`
       $time_start:String!
       $location:String
       $referee:String
-
+      $currentTime:String!
   ) {
     createGame(
       input: {
@@ -100,6 +110,7 @@ export const ADD_GAME = gql`
         time_start: $time_start
         location: $location
         referee: $referee
+        currentTime:$currentTime
       }
     )
     {

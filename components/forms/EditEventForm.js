@@ -7,7 +7,7 @@ import {
   Button,
   LForm,
   Select,
-} from "./Forms";
+} from "../../styles/FormStyles";
 import { useForm, Controller } from "react-hook-form";
 import { useGetEventsByGameId } from "../../apollo/actions";
 import "react-clock/dist/Clock.css";

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import { Card, Title,Image,Button } from './UserCardStyle'
+import { Card, Title,Image,Button } from '../styles/UserCardStyles'
 import EditUserForm from '../components/forms/EditUserForm'
 import { useDeleteUser, useUpdateUSer } from '../apollo/actions';
 import { toast } from "react-toastify";
@@ -29,7 +29,7 @@ const handleUserUpdate=async(data)=>{
   try{
   if(data){
  await updateUser({variables:{id,...data}})
-  toast.success("User has been updated", { autoClose: 2000 });
+
   handleClose()
   }}catch{
     return
@@ -37,6 +37,7 @@ const handleUserUpdate=async(data)=>{
 }
 const handleDeleteUser=()=>{
   deleteUser({ variables: { id: id } });
+
 
 }
   return (

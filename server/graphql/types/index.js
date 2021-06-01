@@ -19,8 +19,14 @@ exports.userTypes = `
   }
   input UpdateUserInput{
     email:String!
-    role:String!
+    role:String
+
   }
+  input editOwnUserInput{
+    email:String!
+    password:String!
+  }
+
 `;
 
 exports.gameTypes = `
@@ -33,6 +39,7 @@ type Game{
   location:String
   referee:String
   added_by:ID
+  currentTime:String!
 }
   input GameInput{
     home_team:String!
@@ -40,6 +47,7 @@ type Game{
     time_start:String!
     location:String
     referee:String
+    currentTime:String!
   }
 type Event{
   _id:ID

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useGetUser, useSignIn } from '../apollo/actions'
-import { FormTitle } from '../components/forms/Forms'
+import { FormTitle } from '../styles/FormStyles'
 import LoginForm from '../components/forms/LoginForm'
 import Redirect from '../components/Redirect'
 import withApollo from '../hoc/withApollo'

@@ -1,10 +1,11 @@
+
 exports.userQueries = {
   user: (root, args, ctx) => {
     return ctx.models.User.getAuthUser(ctx);
   },
-  users:(root,args,ctx)=>{
-      return ctx.models.User.getAll()
-  }
+  users: (root, args, ctx) => {
+    return ctx.models.User.getAll();
+  },
 };
 
 exports.userMutations = {
@@ -18,13 +19,17 @@ exports.userMutations = {
   signOut: (root, args, ctx) => {
     return ctx.models.User.signOut(ctx);
   },
-  updateUser:async(root,{id,input},ctx)=>{
-    const updatedUser=await ctx.models.User.findAndUpdate(id,input)
+  updateUser: async (root, { id, input }, ctx) => {
+    const updatedUser = await ctx.models.User.findAndUpdate(id, input);
     return updatedUser;
   },
-  deleteUser:async(root,{id},ctx)=>{
-    const deletedUser=await ctx.models.User.findAndDelete(id)
-    return deletedUser._id
+  deleteUser: async (root, { id }, ctx) => {
+    const deletedUser = await ctx.models.User.findAndDelete(id);
+    return deletedUser._id;
+  },
+  editOwnUser:async(root,{id,input},ctx)=>{
+    const updatedUser = await ctx.models.User.findAndEditOwnUser(id, input);
+    return updatedUser;
   }
 };
 
@@ -41,26 +46,25 @@ exports.gameQueries = {
     return ctx.models.Event.getAllByGameId(id);
   },
 };
-exports.gameMutatuions={
-  createGame:async (root,{input},ctx)=>{
-    const createdGame=await ctx.models.Game.create(input)
-    return createdGame
+exports.gameMutatuions = {
+  createGame: async (root, { input }, ctx) => {
+
+    const createdGame = await ctx.models.Game.create(input);
+    return createdGame;
   },
-  createGameEvent:async(root,{id,input},ctx)=>{
-     input.game_id=id;
-    const event=await ctx.models.Event.create(input)
+  createGameEvent: async (root, { id, input }, ctx) => {
+    input.game_id = id;
+    const event = await ctx.models.Event.create(input);
     return event;
   },
-  updateEvent:async(root,{id,input},ctx)=>{
-    const updatedEvent = await ctx.models.Event.findAndUpdate(id,input);
+  updateEvent: async (root, { id, input }, ctx) => {
+    const updatedEvent = await ctx.models.Event.findAndUpdate(id, input);
     return updatedEvent;
   },
-  deleteEvent:async(root,{id},ctx)=>{
-      const deletedEvent = await ctx.models.Event.findAndDelete(id);
-      return deletedEvent._id;
-  }
-}
-
+  deleteEvent: async (root, { id }, ctx) => {
+    const deletedEvent = await ctx.models.Event.findAndDelete(id);
+    return deletedEvent._id;
+  },
+};
 
 //game queries and mutatuins ends
-
