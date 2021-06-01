@@ -16,7 +16,7 @@ import {
 import { useGetGames, useCreateGame, useLazyGetUser } from "../apollo/actions";
 import withApollo from "../hoc/withApollo";
 
-import { formatDate, golas, sortGames } from "../utils/dateFormat";
+import { formatDate, golas, sortGames } from "../utils/functions";
 import Result from "../components/Result";
 
 import { useRouter } from "next/router";

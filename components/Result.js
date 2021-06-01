@@ -3,7 +3,7 @@ import React from 'react'
 ;
 import withApollo from '../hoc/withApollo'
 import { GameResult } from '../styles/IndexPageStyles';
-import { dateDifferenceMinute, formatDate, getCurrentTime, getDateFormat, getTimeOnly, golas } from '../utils/dateFormat';
+import { dateDifferenceMinute, formatDate, getCurrentTime, getDateFormat, getTimeOnly, golas } from '../utils/functions';
 const Result = ({id,start_time}) => {
 
   var gameResult = {};

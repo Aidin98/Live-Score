@@ -1,5 +1,5 @@
 import React from "react";
-import { dateDifferenceMinute, golas } from "../utils/dateFormat";
+import { dateDifferenceMinute, golas } from "../utils/functions";
 
 const EventTime = ({ time, id, gameTime }) => {
   var gameResult = {};

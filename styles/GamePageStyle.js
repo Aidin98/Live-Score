@@ -10,7 +10,7 @@ margin-bottom:80px;
 export const EventContainer = styled.div`
   width: 80vw;
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 100%;
   grid-column-gap: 5px;
   margin-top: 10px;
   @media (max-width: 768px) {
@@ -30,7 +30,10 @@ export const EventRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding:0 15px;
+
+  padding: 0 15px;
+  padding-right: ${(p) => (p.isHome ? "55%" : "")};
+  padding-left: ${(p) => (p.isHome ? "" : "55%")};
   &:hover {
     background: lightgray;
   }
@@ -67,4 +70,9 @@ margin:0;
 export const EventForm=styled.div`
 
 align-items:center;
+`
+export const TeamName=styled.div`
+width:100%;
+display:flex;
+justify-content:space-around;
 `

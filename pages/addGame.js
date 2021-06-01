@@ -9,7 +9,7 @@ import withApollo from "../hoc/withApollo";
 import { FormTitle } from "../styles/FormStyles";
 import { Container, Span } from "../styles/LoginStyle";
 import withAuth from "../hoc/withAuth";
-import { getCurrentTime } from "../utils/dateFormat";
+import { getCurrentTime } from "../utils/functions";
 
 const addGame = () => {
   const router = useRouter();

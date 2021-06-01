@@ -19,6 +19,7 @@ import {
   TeamTitle,
   GlobalInfo,
   Info,
+  TeamName,
 } from "../../styles/GamePageStyle";
 import EditIcon from "@material-ui/icons/Edit";
 import {
@@ -40,7 +41,7 @@ import {
   formatEventDate,
   getCurrentTime,
   sortEvents,
-} from "../../utils/dateFormat";
+} from "../../utils/functions";
 import Result from "../../components/Result";
 import { Span } from "../../styles/LoginStyle";
 
@@ -73,7 +74,10 @@ const GamePage = () => {
   const homeEvents = sortEvents(events.filter((p) => p.team === "home"));
   const awayEvents = sortEvents(events.filter((p) => p.team === "away"));
   const globalEvents = events.filter((p) => p.team === "global");
-
+   let HomeAwayEvents = sortEvents(events.filter(function (currentElement) {
+  return currentElement.team === 'home' || currentElement.team === 'away';
+}))
+console.log('svi eventi su ,',HomeAwayEvents)
   useEffect(() => {
     getUser();
   }, []);
@@ -175,11 +179,15 @@ const GamePage = () => {
         </GlobalInfo>
         <EventContainer>
           <Teamcontainer>
-            <TeamTitle>{game.home_team} : Events</TeamTitle>
+            <TeamName>
+              <TeamTitle>{game.home_team} : Events</TeamTitle>
+              <TeamTitle>{game.away_team} : Events</TeamTitle>
+            </TeamName>
+
             {eventData &&
-              homeEvents.map((event) => {
+              HomeAwayEvents.map((event) => {
                 return (
-                  <EventRow key={event._id}>
+                  <EventRow key={event._id} isHome={event.team==='home' ? true : false}>
                     <Info>
                       <EventTime
                         time={event.time}
@@ -198,32 +206,6 @@ const GamePage = () => {
                           onClick={() => handleDeleteEvent(event._id)}
                         />
                       )}
-                    </div>
-                  </EventRow>
-                );
-              })}
-          </Teamcontainer>
-          <Teamcontainer>
-            {" "}
-            <TeamTitle>{game.away_team} : Events</TeamTitle>
-            {eventData &&
-              awayEvents.map((event) => {
-                return (
-                  <EventRow key={event._id}>
-                    <Info>
-                      <EventTime
-                        time={event.time}
-                        id={game._id}
-                        gameTime={game.time_start}
-                      />
-                      ' | {event.eventType}
-                    </Info>
-                    <div>
-                      <EditIcon onClick={() => handleOpen(event._id)} />
-
-                      <DeleteForeverIcon
-                        onClick={() => handleDeleteEvent(event._id)}
-                      />
                     </div>
                   </EventRow>
                 );

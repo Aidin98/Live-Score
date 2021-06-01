@@ -8,41 +8,29 @@ import {
   LForm,
   Select,
 } from "../../styles/FormStyles";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useGetEventsByGameId } from "../../apollo/actions";
-import "react-clock/dist/Clock.css";
+
 import "react-time-picker/dist/TimePicker.css";
 import TP, { TimePickerProps } from "react-time-picker/dist/entry.nostyle";
 import {
   dateDifferenceMinute,
+  doesInclude,
   formatDate,
   getCurrentTime,
   getDateFormat,
   getDateOnly,
   getTimeOnly,
-} from "../../utils/dateFormat";
+} from "../../utils/functions";
 import moment from "moment";
 const EditEventForm = ({ onSubmit, user, id, gameStart }) => {
-  console.log('utakmica pocinje ',gameStart)
+
   const { handleSubmit, register, setValue } = useForm();
   const [action, setAction] = useState("");
-  const [value, onChange] = useState();
+  const [value, onChange] = useState('10:00');
   const { data } = useGetEventsByGameId({ variables: { id: id } });
-  const doesInclude = (type) => {
-    if (data && data.eventsByGameId) {
-      const { eventsByGameId } = data;
-      let eventTypes = [];
-      eventsByGameId.forEach((element) => eventTypes.push(element.eventType));
+   const events = (data && data.eventsByGameId) || [];
 
-      const statement = eventTypes.includes(type);
-
-      if (statement) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  };
   const check = () => {
     if (
       action !== "halftime_start" &&
@@ -55,7 +43,7 @@ const EditEventForm = ({ onSubmit, user, id, gameStart }) => {
     }
   };
   useEffect(() => {
-    register({ name: "time" });
+    register({ name: "time" ,});
   });
   let haha = check();
   const a = new Date(getDateFormat(gameStart));
@@ -77,10 +65,10 @@ const EditEventForm = ({ onSubmit, user, id, gameStart }) => {
           name="eventType"
           onChange={(e) => setAction(e.target.value)}
         >
-          {!doesInclude("halftime_start") && (
+          {!doesInclude("halftime_start",events) && (
             <option value="halftime_start">Halftime-Start</option>
           )}
-          {!doesInclude("halftime_end") && (
+          {!doesInclude("halftime_end",events) && (
             <option value="halftime_end">Halftime-End</option>
           )}
           <option value="goal">Goal</option>
@@ -88,7 +76,7 @@ const EditEventForm = ({ onSubmit, user, id, gameStart }) => {
           <option value="red_card">Red Card</option>
           <option value="substitution">Substitution</option>
           <option value="foul">Foul</option>
-          {!doesInclude("game_end") && (
+          {!doesInclude("game_end",events) && (
             <option value="game_end">Game-End</option>
           )}
         </Select>
@@ -123,6 +111,7 @@ const EditEventForm = ({ onSubmit, user, id, gameStart }) => {
             locale="sv-sv"
             minTime={getTimeOnly(new Date(getDateFormat(gameStart)))}
             maxTime={getTimeOnly(a)}
+           
           />
         )}
       </FormGroup>

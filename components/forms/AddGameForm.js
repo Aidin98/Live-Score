@@ -3,7 +3,7 @@ import { FormGroup, Label, Input, Message, Button, LForm } from "../../styles/Fo
 import { useForm } from "react-hook-form";
 import { Title } from "../../styles/UserCardStyles";
 import TextField from "@material-ui/core/TextField";
-import { getCurrentTime } from "../../utils/dateFormat";
+import { getCurrentTime } from "../../utils/functions";
 const AddGameForm = ({ onSubmit, user }) => {
   const [time_start, setTimeStart] = useState("");
   const { handleSubmit, register,setValue } = useForm();

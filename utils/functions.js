@@ -69,3 +69,18 @@ export const checkEvent = (eventyType,id) => {
   }
   return false;
 };
+
+
+export const doesInclude=(type,events)=>{
+let eventTypes = [];
+      events.forEach((element) =>
+        eventTypes.push({ eventType: element.eventType, time: element.time }))
+
+      for (let i = 0; i < eventTypes.length; i++) {
+        if (eventTypes[i].eventType === type) {
+          return eventTypes[i];
+        }
+      }
+      return false;
+
+}

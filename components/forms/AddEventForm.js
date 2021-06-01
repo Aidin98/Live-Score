@@ -15,38 +15,24 @@ import "react-time-picker/dist/TimePicker.css";
 import TP, { TimePickerProps } from "react-time-picker/dist/entry.nostyle";
 import {
   dateDifferenceMinute,
+  doesInclude,
   formatDate,
   getCurrentTime,
   getDateFormat,
   getDateOnly,
   getTimeOnly,
-} from "../../utils/dateFormat";
+} from "../../utils/functions";
 import moment from "moment";
 
 const AddEventForm = ({ onSubmit, user, id, gameStart }) => {
   const { handleSubmit, register, control, setValue } = useForm();
   const [state, setState] = useState("halftime_start");
   const { data } = useGetEventsByGameId({ variables: { id: id } });
-
+  const events = (data && data.eventsByGameId) || [];
   const [value, onChange] = useState();
 
-  const doesInclude = (type) => {
-    if (data && data.eventsByGameId) {
-      const { eventsByGameId } = data;
-      let eventTypes = [];
-      eventsByGameId.forEach((element) =>
-        eventTypes.push({ eventType: element.eventType, time: element.time })
-      );
-      for (let i = 0; i < eventTypes.length; i++) {
-        if (eventTypes[i].eventType === type) {
-          return eventTypes[i];
-        }
-      }
-      return false;
-    }
-  };
-  const hlaftime_start = doesInclude("halftime_start");
-  console.log("halftime je ", hlaftime_start);
+  const hlaftime_start = doesInclude("halftime_start", events);
+
   const check = () => {
     if (
       state !== "halftime_start" &&
@@ -75,7 +61,8 @@ const AddEventForm = ({ onSubmit, user, id, gameStart }) => {
     <LForm onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
         <Label>Event Type : </Label>
-        {doesInclude("halftime_end") && !doesInclude("halftime_start") ? (
+        {doesInclude("halftime_end", events) &&
+        !doesInclude("halftime_start", events) ? (
           <Select
             ref={register}
             name="eventType"
@@ -89,10 +76,11 @@ const AddEventForm = ({ onSubmit, user, id, gameStart }) => {
             name="eventType"
             onChange={(e) => setState(e.target.value)}
           >
-            {!doesInclude("halftime_start") && doesInclude("halftime_end") && (
-              <option value="halftime_start">Halftime-Start</option>
-            )}
-            {!doesInclude("halftime_end") && eventContitons(45) && (
+            {!doesInclude("halftime_start", events) &&
+              doesInclude("halftime_end", events) && (
+                <option value="halftime_start">Halftime-Start</option>
+              )}
+            {!doesInclude("halftime_end", events) && eventContitons(45) && (
               <option value="halftime_end">Halftime-End</option>
             )}
             <option value="goal">Goal</option>
@@ -100,7 +88,7 @@ const AddEventForm = ({ onSubmit, user, id, gameStart }) => {
             <option value="red_card">Red Card</option>
             <option value="substitution">Substitution</option>
             <option value="foul">Foul</option>
-            {!doesInclude("game_end") && (
+            {!doesInclude("game_end", events) && (
               <option value="game_end">Game-End</option>
             )}
           </Select>
@@ -157,4 +145,3 @@ const AddEventForm = ({ onSubmit, user, id, gameStart }) => {
 };
 
 export default AddEventForm;
-
