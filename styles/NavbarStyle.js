@@ -4,7 +4,7 @@ export const RightNav = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 150px;
+  //width: 150px;
 `;
 export const Nav = styled.nav`
 position:fixed;
@@ -45,7 +45,7 @@ export const DropdownContent = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.04);
   box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
   background:white;
- 
+
 `;
 export const Hamburger = styled.button`
   border: 0;
@@ -58,6 +58,12 @@ export const Hamburger = styled.button`
 export const Button = styled.button`
   border-radius: 25px;
   padding: 5px 12px;
-
-  margin-right:10px;
+  width:100px;
+  margin-right:0;
 `;
+export const LogLinks=styled.div`
+display:flex;
+width:200px;
+justify-content:space-between;
+margin-right:15px;
+`

@@ -71,13 +71,11 @@ const GamePage = () => {
   const [idToUpdate, setIdToUpdate] = useState();
   const game = (gameData && gameData.gameById) || {};
   const events = (eventData && eventData.eventsByGameId) || [];
-  const homeEvents = sortEvents(events.filter((p) => p.team === "home"));
-  const awayEvents = sortEvents(events.filter((p) => p.team === "away"));
   const globalEvents = events.filter((p) => p.team === "global");
    let HomeAwayEvents = sortEvents(events.filter(function (currentElement) {
   return currentElement.team === 'home' || currentElement.team === 'away';
 }))
-console.log('svi eventi su ,',HomeAwayEvents)
+
   useEffect(() => {
     getUser();
   }, []);

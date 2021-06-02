@@ -4,7 +4,7 @@ import Link from 'next/link'
 import {useLazyGetUser,useSignOut} from '../apollo/actions'
 import withApollo from '../hoc/withApollo';
 import { useRouter } from 'next/router';
-import { Button, DropdownContent, Hamburger, Image, LI, Nav, RightNav, UL } from '../styles/NavbarStyle'
+import { Button, DropdownContent, Hamburger, Image, LI, LogLinks, Nav, RightNav, UL } from '../styles/NavbarStyle'
 const AppLink = ({ children, href, as }) => (
   <Link href={href} as={as}>
     <a>{children}</a>
@@ -39,20 +39,28 @@ const handleButtonClick=()=>{
       </AppLink>
       {user && <h5> Welcome {user.email}</h5>}
       <RightNav>
-        <AppLink href="/registration">
-          {!user && <Button>SIGN UP</Button>}
+        <LogLinks>
+
+          <AppLink href="/registration">
+            {!user && <Button>SIGN UP</Button>}
+          </AppLink>
+          
+          <AppLink href="/login">{!user && <Button>LOG IN</Button>}</AppLink>
+        </LogLinks>
+        <AppLink href="/addGame">
+          {user && user.role === "admin" && <Button>Add Game</Button>}
         </AppLink>
-        <AppLink href='/addGame'>
-          {user && user.role === "admin" && (
-            <Button>Add Game</Button>
-          )}
-        </AppLink>
-       {user && <Hamburger onClick={handleButtonClick}>☰</Hamburger>}
+        {user && <Hamburger onClick={handleButtonClick}>☰</Hamburger>}
         {isActive && (
           <DropdownContent>
             <UL>
               <LI>
-                <AppLink href="/editOwnUser/[id]" as={`/editOwnUser/${user._id}`}>Edit Account</AppLink>
+                <AppLink
+                  href="/editOwnUser/[id]"
+                  as={`/editOwnUser/${user._id}`}
+                >
+                  Edit Account
+                </AppLink>
               </LI>
               {!user ? (
                 <LI>

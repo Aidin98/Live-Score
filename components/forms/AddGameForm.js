@@ -3,7 +3,7 @@ import { FormGroup, Label, Input, Message, Button, LForm } from "../../styles/Fo
 import { useForm } from "react-hook-form";
 import { Title } from "../../styles/UserCardStyles";
 import TextField from "@material-ui/core/TextField";
-import { getCurrentTime } from "../../utils/functions";
+import { datePickerFormat, formatDate, getCurrentTime } from "../../utils/functions";
 const AddGameForm = ({ onSubmit, user }) => {
   const [time_start, setTimeStart] = useState("");
   const { handleSubmit, register,setValue } = useForm();
@@ -11,7 +11,7 @@ const AddGameForm = ({ onSubmit, user }) => {
     register({ name: "time_start" });
 
   },[]);
- console.log('izabrano vrijeme je ',time_start)
+ console.log('izabrano vrijeme je ',getCurrentTime())
   return (
     <LForm onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
@@ -27,7 +27,7 @@ const AddGameForm = ({ onSubmit, user }) => {
         <TextField
           id="datetime-local"
           type="datetime-local"
-          defaultValue="2017-05-24T10:30"
+          defaultValue={datePickerFormat(getCurrentTime())}
           onChange={(e) => {
             setValue("time_start", e.target.value);
             setTimeStart(e.target.value);
@@ -35,7 +35,7 @@ const AddGameForm = ({ onSubmit, user }) => {
           InputLabelProps={{
             shrink: true,
           }}
-          mindatetime={getCurrentTime()}
+
         />
       </FormGroup>
       <FormGroup>

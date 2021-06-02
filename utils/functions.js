@@ -6,6 +6,9 @@ export const formatDate = (date) => {
 export const getDateFormat=(date)=>{
   return moment.unix(date / 1000).format();
 }
+export const datePickerFormat=(date)=>{
+  return moment.unix(date / 1000).format("YYYY-MM-DD[T]HH:mm:ss");
+}
 export const getDateOnly=(date)=>{
   return moment.unix(date/1000).format("DD/MM/YY")
 }

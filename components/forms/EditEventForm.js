@@ -27,7 +27,7 @@ const EditEventForm = ({ onSubmit, user, id, gameStart }) => {
 
   const { handleSubmit, register, setValue } = useForm();
   const [action, setAction] = useState("");
-  const [value, onChange] = useState('10:00');
+  const [value, onChange] = useState(getTimeOnly(getCurrentTime()));
   const { data } = useGetEventsByGameId({ variables: { id: id } });
    const events = (data && data.eventsByGameId) || [];
 
@@ -107,11 +107,12 @@ const EditEventForm = ({ onSubmit, user, id, gameStart }) => {
                   "DD-MM-YYYY HH:mm ss"
                 ).format()
               );
+              onChange()
             }}
             locale="sv-sv"
             minTime={getTimeOnly(new Date(getDateFormat(gameStart)))}
             maxTime={getTimeOnly(a)}
-           
+
           />
         )}
       </FormGroup>

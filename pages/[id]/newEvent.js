@@ -22,7 +22,7 @@ const newEvent = () => {
     variables: { id: router.query.id },
   });
   const game = (gameData && gameData.gameById) || {};
-  console.log("utakmice su", game);
+
   const handleCreateGameEvent = async (data) => {
     try {
       if (data) {

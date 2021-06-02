@@ -30,7 +30,7 @@ const addGame = () => {
   return (
     <BaseLayout>
       <Container>
-        <FormTitle>Add New Event</FormTitle>
+        <FormTitle>Add New Game</FormTitle>
         <AddGameForm onSubmit={handleCreateGame} />
         <pre>
           {error &&

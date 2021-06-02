@@ -8,7 +8,7 @@ import {
   LForm,
   Select,
 } from "../../styles/FormStyles";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useGetEventsByGameId } from "../../apollo/actions";
 import "react-clock/dist/Clock.css";
 import "react-time-picker/dist/TimePicker.css";
@@ -29,7 +29,7 @@ const AddEventForm = ({ onSubmit, user, id, gameStart }) => {
   const [state, setState] = useState("halftime_start");
   const { data } = useGetEventsByGameId({ variables: { id: id } });
   const events = (data && data.eventsByGameId) || [];
-  const [value, onChange] = useState();
+  const [value, onChange] = useState(getTimeOnly(getCurrentTime()));
 
   const hlaftime_start = doesInclude("halftime_start", events);
 
@@ -123,6 +123,7 @@ const AddEventForm = ({ onSubmit, user, id, gameStart }) => {
                   "DD-MM-YYYY HH:mm ss"
                 ).format()
               );
+              onChange()
             }}
             locale="sv-sv"
             minTime={
