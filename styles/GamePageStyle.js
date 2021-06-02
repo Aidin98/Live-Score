@@ -65,6 +65,7 @@ export const GlobalInfo = styled.div`
 export const Info=styled.p`
 padding:3px;
 margin:0;
+display:flex;
 `
 
 export const EventForm=styled.div`

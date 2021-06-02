@@ -63,7 +63,7 @@ export const Button = styled.button`
 `;
 export const LogLinks=styled.div`
 display:flex;
-width:200px;
+width:220px;
 justify-content:space-between;
 margin-right:15px;
 `

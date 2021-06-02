@@ -170,7 +170,18 @@ const GamePage = () => {
           {globalEvents.map((global) => {
             return (
               <Info key={global._id}>
-                {niceTitle(global.eventType)} {formatDate(global.time)}
+                {niceTitle(global.eventType)} {formatDate(global.time)}{" "}
+                <div style={{marginLeft:"10px"}}>
+                  {user && user.role === "admin" && (
+                    <EditIcon onClick={() => handleOpen(global._id)} />
+                  )}
+
+                  {user && user.role === "admin" && (
+                    <DeleteForeverIcon
+                      onClick={() => handleDeleteEvent(global._id)}
+                    />
+                  )}
+                </div>
               </Info>
             );
           })}
